@@ -9,7 +9,7 @@ import Foreign.Ptr (Ptr)
 
 import WL.Utils (WL_list)
 import WL.ServerCore (WL_signal)
-import WLR.Types.Keyboard (WLR_keyboard)
+import {-# SOURCE #-} WLR.Types.Keyboard (WLR_keyboard)
 
 data {-# CTYPE "wlr/types/wlr_keyboard_group.h" "struct wlr_keyboard_group" #-} WLR_keyboard_group
     = WLR_keyboard_group
