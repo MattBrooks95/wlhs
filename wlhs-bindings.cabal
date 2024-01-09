@@ -24,6 +24,7 @@ library
         WLR.Types.Buffer
         WLR.Types.InputDevice
         WLR.Types.Pointer
+		WLR.Types.Keyboard
         WLR.Util.Addon
         WLR.Util.Box
         WLR.Util.Edges
