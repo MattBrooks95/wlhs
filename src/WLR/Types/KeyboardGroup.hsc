@@ -41,3 +41,20 @@ data {-# CTYPE "wlr/types/wlr_keyboard_group.h" "struct wlr_keyboard_group" #-} 
 
     , wlr_keyboard_group_data :: Ptr ()
     }
+
+foreign import capi "wlr/types/wlr_keyboard_group.h wlr_keyboard_group_create"
+    wlr_keyboard_group_create :: IO (Ptr WLR_keyboard_group)
+
+foreign import capi "wlr/types/wlr_keyboard_group.h wlr_keyboard_group_from_wlr_keyboard"
+    wlr_keyboard_group_from_wlr_keyboard :: Ptr WLR_keyboard -> Ptr WLR_keyboard_group
+
+-- TODO I looked at the C code for this function and it looks pure, but I'm not sure if it actually is
+-- put it in IO for now
+foreign import capi "wlr/types/wlr_keyboard_group.h wlr_keyboard_group_add_keyboard"
+    wlr_keyboard_group_add_keyboard :: Ptr WLR_keyboard_group -> Ptr WLR_keyboard -> IO (Bool)
+
+foreign import capi "wlr/types/wlr_keyboard_group.h wlr_keyboard_group_remove_keyboard"
+    wlr_keyboard_group_remove_keyboard :: Ptr WLR_keyboard_group -> Ptr WLR_keyboard -> IO ()
+
+foreign import capi "wlr/types/wlr_keyboard_group.h wlr_keyboard_group_destroy"
+    wlr_keyboard_group_destroy :: Ptr WLR_keyboard_group -> IO ()

@@ -9,6 +9,7 @@ import Foreign (Word32, Storable(..))
 import Foreign.Ptr (Ptr)
 
 import WLR.Types.InputDevice (WLR_input_device)
+import WLR.Types.KeyboardGroup (WLR_keyboard_group)
 
 pattern WLR_LED_COUNT :: (Eq a, Num a) => a
 pattern WLR_LED_COUNT = #const WLR_LED_COUNT
@@ -87,10 +88,8 @@ data {-# CTYPE "wlr/types/wlr_keyboard.h" "struct wlr_keyboard_modifiers" #-} WL
     = WLR_keyboard
     { wlr_keyboard_base :: Ptr WLR_input_device
     , wlr_keyboard_impl :: Ptr WLR_keyboard_impl
+    , wlr_keyboard_group :: Ptr WLR_keyboard_group
     }
-    -- struct wlr_keyboard_group *group;
-    --, wlr_keyboard_group :: Ptr WLR_keyboard_group
-
     --char *keymap_string;
     --size_t keymap_size;
     --int keymap_fd;
