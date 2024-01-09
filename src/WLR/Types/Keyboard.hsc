@@ -79,3 +79,51 @@ instance Storable WLR_keyboard_modifiers where
         (#poke struct wlr_keyboard_modifiers, latched) ptr $ wlr_keyboard_modifiers_latched t
         (#poke struct wlr_keyboard_modifiers, locked) ptr $ wlr_keyboard_modifiers_locked t
         (#poke struct wlr_keyboard_modifiers, group) ptr $ wlr_keyboard_modifiers_group t
+
+data {-# CTYPE "wlr/types/wlr_keyboard.h" "struct wlr_keyboard_modifiers" #-} WLR_keyboard
+    = WLR_keyboard
+    { wlr_keyboard_base :: Ptr WLR_input_device
+    , wlr_keyboard_impl :: Ptr WLR_keyboard_impl
+    -- struct wlr_keyboard_group *group;
+    --, wlr_keyboard_group :: Ptr WLR_keyboard_group
+
+    --char *keymap_string;
+    --size_t keymap_size;
+    --int keymap_fd;
+    --struct xkb_keymap *keymap;
+    --struct xkb_state *xkb_state;
+    --xkb_led_index_t led_indexes[WLR_LED_COUNT];
+    --xkb_mod_index_t mod_indexes[WLR_MODIFIER_COUNT];
+
+    --uint32_t leds;
+    --uint32_t keycodes[WLR_KEYBOARD_KEYS_CAP];
+    --size_t num_keycodes;
+    --struct wlr_keyboard_modifiers modifiers;
+
+    --struct {
+    --    int32_t rate;
+    --    int32_t delay;
+    --} repeat_info;
+
+    --struct {
+    --    /**
+    --     * The `key` event signals with a struct wlr_keyboard_key_event that a
+    --     * key has been pressed or released on the keyboard. This event is
+    --     * emitted before the xkb state of the keyboard has been updated
+    --     * (including modifiers).
+    --     */
+    --    struct wl_signal key;
+
+    --    /**
+    --     * The `modifiers` event signals that the modifier state of the
+    --     * struct wlr_keyboard has been updated. At this time, you can read the
+    --     * modifier state of the struct wlr_keyboard and handle the updated
+    --     * state by sending it to clients.
+    --     */
+    --    struct wl_signal modifiers;
+    --    struct wl_signal keymap;
+    --    struct wl_signal repeat_info;
+    --} events;
+
+    --void *data;
+    --}
