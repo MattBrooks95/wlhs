@@ -6,7 +6,11 @@ module WLR.Types.Keyboard where
 #include <wlr/types/wlr_keyboard.h>
 
 import Foreign (Word32, Storable(..))
+import Foreign.C.Types (CSize(..), CInt)
+import Foreign.C.String (CString)
 import Foreign.Ptr (Ptr)
+
+import Text.XkbCommon.InternalTypes (CKeymap, CKeyboardState)
 
 import WLR.Types.InputDevice (WLR_input_device)
 import WLR.Types.KeyboardGroup (WLR_keyboard_group)
@@ -89,10 +93,10 @@ data {-# CTYPE "wlr/types/wlr_keyboard.h" "struct wlr_keyboard_modifiers" #-} WL
     { wlr_keyboard_base :: Ptr WLR_input_device
     , wlr_keyboard_impl :: Ptr WLR_keyboard_impl
     , wlr_keyboard_group :: Ptr WLR_keyboard_group
+    , wlr_keyboard_keymap_string :: CString
+    , wlr_keyboard_keymap_size :: CSize
+    , wlr_keyboard_keymap_fd :: CInt
     }
-    --char *keymap_string;
-    --size_t keymap_size;
-    --int keymap_fd;
     --struct xkb_keymap *keymap;
     --struct xkb_state *xkb_state;
     --xkb_led_index_t led_indexes[WLR_LED_COUNT];
