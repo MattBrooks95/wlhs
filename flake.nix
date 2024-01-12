@@ -22,6 +22,14 @@
         });
         haskellPackages = pkgs.haskellPackages.extend (final: prev: {
           wlhs-bindings = prev.callCabal2nix "wlhs-bindings" ./. { };
+          xkbcommon = prev.xkbcommon.overrideAttrs (old: rec {
+            src = pkgs.fetchFromGitHub {
+              owner = "abooij";
+              repo = "haskell-xkbcommon";
+              rev = "master";
+              hash = "sha256-IPue2Px3q3AxfLl84CbjYpHcZNZLuvJBP9vef8opyUc=";
+            };
+          });
         });
       in {
         devShells.default = haskellPackages.shellFor {
