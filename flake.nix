@@ -27,7 +27,7 @@
               owner = "MattBrooks95";
               repo = "haskell-xkbcommon";
               rev = "fix-build";
-              hash = "sha256-N6c4/XkSXMldoXu3DWf1ptceFwJutofY3hRgoYJX/30=";
+              hash = "sha256-YYJoZUbDoYARPJo9hcEzn6EeDyyayL3O9LlJmvzg6es=";
             };
             broken = false;
           });
