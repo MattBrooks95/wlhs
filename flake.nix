@@ -24,11 +24,12 @@
           wlhs-bindings = prev.callCabal2nix "wlhs-bindings" ./. { };
           xkbcommon = prev.xkbcommon.overrideAttrs (old: rec {
             src = pkgs.fetchFromGitHub {
-              owner = "ongy";
+              owner = "MattBrooks95";
               repo = "haskell-xkbcommon";
-              rev = "master";
-              hash = "sha256-72tDiUW3XRT8e0874h3+uO7q3HzHNVL0WfiV0Jsg+Wg=";
+              rev = "fix-build";
+              hash = "sha256-N6c4/XkSXMldoXu3DWf1ptceFwJutofY3hRgoYJX/30=";
             };
+            broken = false;
           });
         });
       in {
