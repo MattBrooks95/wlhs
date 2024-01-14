@@ -96,6 +96,7 @@ data {-# CTYPE "wlr/types/wlr_keyboard.h" "struct wlr_keyboard_modifiers" #-} WL
     , wlr_keyboard_keymap_string :: CString
     , wlr_keyboard_keymap_size :: CSize
     , wlr_keyboard_keymap_fd :: CInt
+    -- , wlr_keyboard_keymap :: CKeymap
     }
     --struct xkb_keymap *keymap;
     --struct xkb_state *xkb_state;
