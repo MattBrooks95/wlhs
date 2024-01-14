@@ -38,4 +38,4 @@ library
     default-extensions: CApiFFI
     ghc-options:        -Wall -fno-show-valid-hole-fits -optc -Wno-discarded-qualifiers
     build-depends:      base >=4.16.4.0 && <5
-                        , xkbcommon
+                        -- , xkbcommon
