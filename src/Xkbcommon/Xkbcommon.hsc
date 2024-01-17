@@ -1,11 +1,16 @@
+{-# LANGUAGE PatternSynonyms #-}
 module Xkbcommon.Xkbcommon where
+
+import Foreign.C.Types (CInt)
+
+#include <xkbcommon/xkbcommon.h>
 
 {- Flags for keymap compilation.
     /** Do not apply any flags. */
     XKB_KEYMAP_COMPILE_NO_FLAGS = 0
 -}
 {{ enum
-    xkb_keymap_compile_flags,
+    XKB_keymap_compile_flags,
     XKB_KEYMAP_COMPILE_NO_FLAGS
 }}
 
@@ -14,6 +19,6 @@ module Xkbcommon.Xkbcommon where
     XKB_KEYMAP_FORMAT_TEXT_V1 = 1
  -}
 {{ enum
-    xkb_keymap_format,
+    XKB_keymap_format,
     XKB_KEYMAP_FORMAT_TEXT_V1
 }}

@@ -1,8 +1,12 @@
 {-# LANGUAGE PatternSynonyms #-}
 module Xkbcommon.Keymap where
 
+import Foreign.C.Types (CInt)
+
+import Data.Bits ((.|.))
+
 import Xkbcommon.Xkbcommon (
-    xkb_keymap_compile_flags
+    XKB_keymap_compile_flags
     )
 
 --enum xkb_action_controls {
@@ -29,8 +33,10 @@ pattern CONTROL_BELL = 512
 pattern CONTROL_IGNORE_GROUP_LOCK :: (Eq a, Num a) => a
 pattern CONTROL_IGNORE_GROUP_LOCK = 1024
 
-control_all :: (Eq a, Num a) => a
-control_all = foldl (.|.) [
+-- TODO check that this gets the correct answer
+-- it should be all of the flags bitwise OR'd together
+control_all :: CInt
+control_all = foldl (.|.) 0 [
         CONTROL_REPEAT, CONTROL_SLOW, CONTROL_DEBOUNCE, CONTROL_STICKY,
         CONTROL_MOUSEKEYS, CONTROL_MOUSEKEYS_ACCEL, CONTROL_AX,
         CONTROL_AX_TIMEOUT, CONTROL_AX_FEEDBACK, CONTROL_BELL,
