@@ -21,6 +21,7 @@ custom-setup
 library
     exposed-modules:
         WL.ServerCore
+        WL.Keyboard
         WL.ServerProtocol
         WL.Utils
         WL.Version

@@ -13,6 +13,9 @@ import Foreign.Ptr (Ptr)
 import WLR.Types.InputDevice (WLR_input_device)
 import WLR.Types.KeyboardGroup (WLR_keyboard_group)
 
+import WL.ServerCore (WL_signal)
+import WL.Keyboard (WL_keyboard_key_state)
+
 pattern WLR_LED_COUNT :: (Eq a, Num a) => a
 pattern WLR_LED_COUNT = #const WLR_LED_COUNT
 
@@ -99,39 +102,32 @@ type ArrayType = ()
     num_keycodes, CSize,
     modifiers, WLR_keyboard_modifiers,
     repeat_info rate, Word32,
-    repeat_info delay, Word32
+    repeat_info delay, Word32,
+    events key, WL_signal,
+    events modifiers, WL_signal,
+    events keymap, WL_signal,
+    events repeat_info, WL_signal,
+    data, Ptr ()
 }}
+    --remaining array types
     --xkb_led_index_t led_indexes[WLR_LED_COUNT];
     --xkb_mod_index_t mod_indexes[WLR_MODIFIER_COUNT];
-
     --uint32_t keycodes[WLR_KEYBOARD_KEYS_CAP];
-    --size_t num_keycodes;
-    --struct wlr_keyboard_modifiers modifiers;
 
-    --struct {
-    --    int32_t rate;
-    --    int32_t delay;
-    --} repeat_info;
+{{ struct
+    wlr/types/wlr_keyboard.h,
+    wlr_keyboard_key_event,
+    time_msec, Word32,
+    keycode, Word32,
+    update_state, Bool,
+    state, WL_keyboard_key_state
+}}
+--struct wlr_keyboard_key_event {
+--	uint32_t time_msec;
+--	uint32_t keycode;
+--	bool update_state; // if backend doesn't update modifiers on its own
+--	enum wl_keyboard_key_state state;
+--};
 
-    --struct {
-    --    /**
-    --     * The `key` event signals with a struct wlr_keyboard_key_event that a
-    --     * key has been pressed or released on the keyboard. This event is
-    --     * emitted before the xkb state of the keyboard has been updated
-    --     * (including modifiers).
-    --     */
-    --    struct wl_signal key;
 
-    --    /**
-    --     * The `modifiers` event signals that the modifier state of the
-    --     * struct wlr_keyboard has been updated. At this time, you can read the
-    --     * modifier state of the struct wlr_keyboard and handle the updated
-    --     * state by sending it to clients.
-    --     */
-    --    struct wl_signal modifiers;
-    --    struct wl_signal keymap;
-    --    struct wl_signal repeat_info;
-    --} events;
 
-    --void *data;
-    --}
