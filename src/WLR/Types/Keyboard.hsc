@@ -64,37 +64,28 @@ data {-# CTYPE "wlr/types/wlr_keyboard.h" "struct wlr_keyboard impl" #-} WLR_key
 
 -- xkbd_mod_mask_t is a type alias for uint32_t
 
-data {-# CTYPE "wlr/types/wlr_keyboard.h" "struct wlr_keyboard_modifiers" #-} WLR_keyboard_modifiers
-    = WLR_keyboard_modifiers
-    { wlr_keyboard_modifiers_depressed :: Word32
-    , wlr_keyboard_modifiers_latched :: Word32
-    , wlr_keyboard_modifiers_locked :: Word32
-    , wlr_keyboard_modifiers_group :: Word32
-    }
+{{ struct
+    wlr/types/wlr_keyboard.h,
+    wlr_keyboard_modifiers,
+    depressed, Word32,
+    latched, Word32,
+    locked, Word32,
+    group, Word32
+}}
 
-instance Storable WLR_keyboard_modifiers where
-    alignment _ = #alignment struct wlr_keyboard_modifiers
-    sizeOf _ = #size struct wlr_keyboard_modifiers
-    peek ptr = WLR_keyboard_modifiers
-        <$> (#peek struct wlr_keyboard_modifiers, depressed) ptr
-        <*> (#peek struct wlr_keyboard_modifiers, latched) ptr
-        <*> (#peek struct wlr_keyboard_modifiers, locked) ptr
-        <*> (#peek struct wlr_keyboard_modifiers, group) ptr
-    poke ptr t = do
-        (#poke struct wlr_keyboard_modifiers, depressed) ptr $ wlr_keyboard_modifiers_depressed t
-        (#poke struct wlr_keyboard_modifiers, latched) ptr $ wlr_keyboard_modifiers_latched t
-        (#poke struct wlr_keyboard_modifiers, locked) ptr $ wlr_keyboard_modifiers_locked t
-        (#poke struct wlr_keyboard_modifiers, group) ptr $ wlr_keyboard_modifiers_group t
+data Xkb_keymap
+data Xkb_state
 
-data {-# CTYPE "wlr/types/wlr_keyboard.h" "struct wlr_keyboard_modifiers" #-} WLR_keyboard
-    = WLR_keyboard
-    { wlr_keyboard_base :: Ptr WLR_input_device
-    , wlr_keyboard_impl :: Ptr WLR_keyboard_impl
-    , wlr_keyboard_group :: Ptr WLR_keyboard_group
-    , wlr_keyboard_keymap_string :: CString
-    , wlr_keyboard_keymap_size :: CSize
-    , wlr_keyboard_keymap_fd :: CInt
-    }
+{{ struct
+    wlr/types/wlr_keyboard.h,
+    wlr_keyboard,
+    base, Ptr WLR_input_device,
+    impl, Ptr WLR_keyboard_impl,
+    group , Ptr WLR_keyboard_group,
+    keymap_string, CString,
+    keymap_size, CSize,
+    keymap_fd, CInt,
+}}
     --struct xkb_keymap *keymap;
     --struct xkb_state *xkb_state;
     --xkb_led_index_t led_indexes[WLR_LED_COUNT];
