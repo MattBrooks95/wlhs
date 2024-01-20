@@ -52,3 +52,7 @@ foreign import capi "wayland-server-core.h wl_display_run"
 
 foreign import capi "wayland-server-core.h wl_display_destroy_clients"
     wl_display_destroy_clients :: Ptr WL_display -> IO ()
+
+-- Is this the proper way to type a function pointer?
+type WL_resource_destroy_func_t = Ptr WL_resource -> IO ()
+--typedef void (*wl_resource_destroy_func_t)(struct wl_resource *resource);
