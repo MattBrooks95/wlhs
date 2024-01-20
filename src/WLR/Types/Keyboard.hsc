@@ -10,9 +10,6 @@ import Foreign.C.Types (CSize(..), CInt)
 import Foreign.C.String (CString)
 import Foreign.Ptr (Ptr)
 
---import Text.XkbCommon.InternalTypes (CKeymap, CKeyboardState)
-import Xkbcommon.Keymap (Keymap)
-
 import WLR.Types.InputDevice (WLR_input_device)
 import WLR.Types.KeyboardGroup (WLR_keyboard_group)
 
