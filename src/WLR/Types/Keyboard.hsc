@@ -6,7 +6,7 @@ module WLR.Types.Keyboard where
 #include <wlr/types/wlr_keyboard.h>
 
 import Foreign (Word32, Storable(..))
-import Foreign.C.Types (CSize(..), CInt)
+import Foreign.C.Types (CSize(..), CInt(..), CBool(..))
 import Foreign.C.String (CString)
 import Foreign.Ptr (Ptr)
 
@@ -19,6 +19,7 @@ import WL.Keyboard (WL_keyboard_key_state)
 pattern WLR_LED_COUNT :: (Eq a, Num a) => a
 pattern WLR_LED_COUNT = #const WLR_LED_COUNT
 
+type WLR_keyboard_led = CInt
 -- enum wlr_keyboard_led
 --WLR_LED_NUM_LOCK = 1 << 0,
 pattern WLR_LED_NUM_LOCK :: (Eq a, Num a) => a
@@ -33,6 +34,7 @@ pattern WLR_LED_SCROLL_LOCK = 4
 pattern WLR_MODIFIER_COUNT :: (Eq a, Num a) => a
 pattern WLR_MODIFIER_COUNT = 8
 
+type Wlr_keyboard_modifier = CInt
 -- enum wlr_keyboard_modifier {
 -- WLR_MODIFIER_SHIFT = 1 << 0,
 pattern WLR_MODIFIER_SHIFT :: (Eq a, Num a) => a
@@ -119,15 +121,49 @@ type ArrayType = ()
     wlr_keyboard_key_event,
     time_msec, Word32,
     keycode, Word32,
-    update_state, Bool,
+    update_state, CBool,
     state, WL_keyboard_key_state
 }}
---struct wlr_keyboard_key_event {
---	uint32_t time_msec;
---	uint32_t keycode;
---	bool update_state; // if backend doesn't update modifiers on its own
---	enum wl_keyboard_key_state state;
---};
 
+{-
+ - Get a struct wlr_keyboard from a struct wlr_input_device.
+ -
+ - Asserts that the input device is a keyboard.
+ -}
+foreign import capi "wlr/types/wlr_keyboard.h wlr_keyboard_from_input_device"
+    wlr_keyboard_from_input_device :: Ptr WLR_input_device -> IO (Ptr WLR_keyboard)
 
+foreign import capi "wlr/types/wlr_keyboard.h wlr_keyboard_set_keymap"
+    wlr_keyboard_set_keymap :: Ptr wLR_keyboard -> Ptr Xkb_keymap -> CBool
 
+foreign import capi "wlr/types/wlr_keyboard.h wlr_keyboard_keymaps_match"
+    wlr_keyboard_keymaps_match :: Ptr Xkb_keymap -> Ptr Xkb_keymap -> CBool
+
+{-
+ - Set the keyboard repeat info.
+ -
+ - rate is in key repeats/second and delay is in milliseconds.
+ -
+ - keyboard -> rate -> delay
+ -}
+foreign import capi "wlr/types/wlr_keyboard.h wlr_keyboard_set_repeat_info"
+    wlr_keyboard_set_repeat_info :: Ptr WLR_keyboard -> CInt -> CInt -> IO ()
+
+{-
+ - Update the LEDs on the device, if any.
+ -
+ - leds is a bitmask of enum wlr_keyboard_led.
+ -
+ - If the device doesn't have the provided LEDs, this function is a no-op.
+ -}
+
+foreign import capi "wlr/types/wlr_keyboard.h wlr_keyboard_led_update"
+    wlr_keyboard_led_update :: Ptr WLR_keyboard -> CInt -> IO ()
+
+{-
+ - Get the set of currently depressed or latched modifiers.
+ -
+ - A bitmask of enum wlr_keyboard_modifier is returned.
+ -}
+foreign import capi "wlr/types/wlr_keyboard.h wlr_keyboard_get_modifiers"
+    wlr_keyboard_get_modifiers :: Ptr WLR_keyboard -> IO (Wlr_keyboard_modifier)
