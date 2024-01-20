@@ -73,8 +73,13 @@ data {-# CTYPE "wlr/types/wlr_keyboard.h" "struct wlr_keyboard impl" #-} WLR_key
     group, Word32
 }}
 
+-- cannot import these types from libxcommon because of their fields which have
+-- internal types that aren't exported
 data Xkb_keymap
 data Xkb_state
+
+-- TODO write this by hand or update the macro to work with arrays
+type ArrayType = ()
 
 {{ struct
     wlr/types/wlr_keyboard.h,
@@ -85,13 +90,20 @@ data Xkb_state
     keymap_string, CString,
     keymap_size, CSize,
     keymap_fd, CInt,
+    keymap, Ptr Xkb_keymap,
+    xkb_state, Ptr Xkb_state,
+    led_indexes, ArrayType,
+    mod_indexes, ArrayType,
+    leds, CInt,
+    keycodes, ArrayType,
+    num_keycodes, CSize,
+    modifiers, WLR_keyboard_modifiers,
+    repeat_info rate, Word32,
+    repeat_info delay, Word32
 }}
-    --struct xkb_keymap *keymap;
-    --struct xkb_state *xkb_state;
     --xkb_led_index_t led_indexes[WLR_LED_COUNT];
     --xkb_mod_index_t mod_indexes[WLR_MODIFIER_COUNT];
 
-    --uint32_t leds;
     --uint32_t keycodes[WLR_KEYBOARD_KEYS_CAP];
     --size_t num_keycodes;
     --struct wlr_keyboard_modifiers modifiers;
