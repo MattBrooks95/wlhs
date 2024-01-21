@@ -27,6 +27,7 @@ library
         WL.Version
         WLR.Backend
         WLR.Render.Allocator
+        WLR.Render.Texture
         WLR.Render.DrmFormatSet
         WLR.Render.Renderer
         WLR.Types.Buffer
@@ -39,8 +40,9 @@ library
         WLR.Util.Edges
         WLR.Util.Log
         WLR.Version
+        Pixman.Types.Region
 
-    pkgconfig-depends:  wlroots ==0.17.1, wayland-server
+    pkgconfig-depends:  wlroots ==0.17.1, wayland-server, pixman-1
     hs-source-dirs:     src
     default-language:   Haskell2010
     default-extensions: CApiFFI
