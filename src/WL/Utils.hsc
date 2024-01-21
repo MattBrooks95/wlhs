@@ -44,5 +44,5 @@ foreign import capi "wayland-util.h wl_list_empty"
     method_count, CInt,
     methods, Ptr WL_message,
     event_count, CInt,
-    events, Ptr WL_Message
+    events, Ptr WL_message
 }}
