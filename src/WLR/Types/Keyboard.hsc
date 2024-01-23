@@ -5,8 +5,8 @@ module WLR.Types.Keyboard where
 #define WLR_USE_UNSTABLE
 #include <wlr/types/wlr_keyboard.h>
 
-import Foreign (Word32, Storable(..))
-import Foreign.C.Types (CSize(..), CInt(..), CBool(..))
+import Foreign (Storable(..))
+import Foreign.C.Types (CSize(..), CInt(..), CBool(..), CUInt)
 import Foreign.C.String (CString)
 import Foreign.Ptr (Ptr)
 
@@ -34,7 +34,7 @@ pattern WLR_LED_SCROLL_LOCK = 4
 pattern WLR_MODIFIER_COUNT :: (Eq a, Num a) => a
 pattern WLR_MODIFIER_COUNT = 8
 
-type Wlr_keyboard_modifier = CInt
+type WLR_keyboard_modifier = CInt
 -- enum wlr_keyboard_modifier {
 -- WLR_MODIFIER_SHIFT = 1 << 0,
 pattern WLR_MODIFIER_SHIFT :: (Eq a, Num a) => a
@@ -72,16 +72,16 @@ data {-# CTYPE "wlr/types/wlr_keyboard.h" "struct wlr_keyboard impl" #-} WLR_key
 {{ struct
     wlr/types/wlr_keyboard.h,
     wlr_keyboard_modifiers,
-    depressed, Word32,
-    latched, Word32,
-    locked, Word32,
-    group, Word32
+    depressed, CUInt,
+    latched, CUInt,
+    locked, CUInt,
+    group, CUInt
 }}
 
 -- cannot import these types from libxcommon because of their fields which have
 -- internal types that aren't exported
-data Xkb_keymap
-data Xkb_state
+data XKB_keymap
+data XKB_state
 
 -- TODO write this by hand or update the macro to work with arrays
 type ArrayType = ()
@@ -95,16 +95,16 @@ type ArrayType = ()
     keymap_string, CString,
     keymap_size, CSize,
     keymap_fd, CInt,
-    keymap, Ptr Xkb_keymap,
-    xkb_state, Ptr Xkb_state,
+    keymap, Ptr XKB_keymap,
+    xkb_state, Ptr XKB_state,
     led_indexes, ArrayType,
     mod_indexes, ArrayType,
     leds, CInt,
     keycodes, ArrayType,
     num_keycodes, CSize,
     modifiers, WLR_keyboard_modifiers,
-    repeat_info rate, Word32,
-    repeat_info delay, Word32,
+    repeat_info rate, CUInt,
+    repeat_info delay, CUInt,
     events key, WL_signal,
     events modifiers, WL_signal,
     events keymap, WL_signal,
@@ -119,8 +119,8 @@ type ArrayType = ()
 {{ struct
     wlr/types/wlr_keyboard.h,
     wlr_keyboard_key_event,
-    time_msec, Word32,
-    keycode, Word32,
+    time_msec, CUInt,
+    keycode, CUInt,
     update_state, CBool,
     state, WL_keyboard_key_state
 }}
@@ -134,10 +134,10 @@ foreign import capi "wlr/types/wlr_keyboard.h wlr_keyboard_from_input_device"
     wlr_keyboard_from_input_device :: Ptr WLR_input_device -> IO (Ptr WLR_keyboard)
 
 foreign import capi "wlr/types/wlr_keyboard.h wlr_keyboard_set_keymap"
-    wlr_keyboard_set_keymap :: Ptr wLR_keyboard -> Ptr Xkb_keymap -> CBool
+    wlr_keyboard_set_keymap :: Ptr WLR_keyboard -> Ptr XKB_keymap -> CBool
 
 foreign import capi "wlr/types/wlr_keyboard.h wlr_keyboard_keymaps_match"
-    wlr_keyboard_keymaps_match :: Ptr Xkb_keymap -> Ptr Xkb_keymap -> CBool
+    wlr_keyboard_keymaps_match :: Ptr XKB_keymap -> Ptr XKB_keymap -> CBool
 
 {-
  - Set the keyboard repeat info.
@@ -166,4 +166,4 @@ foreign import capi "wlr/types/wlr_keyboard.h wlr_keyboard_led_update"
  - A bitmask of enum wlr_keyboard_modifier is returned.
  -}
 foreign import capi "wlr/types/wlr_keyboard.h wlr_keyboard_get_modifiers"
-    wlr_keyboard_get_modifiers :: Ptr WLR_keyboard -> IO (Wlr_keyboard_modifier)
+    wlr_keyboard_get_modifiers :: Ptr WLR_keyboard -> IO (WLR_keyboard_modifier)
