@@ -46,3 +46,11 @@ foreign import capi "wayland-util.h wl_list_empty"
     event_count, CInt,
     events, Ptr WL_message
 }}
+
+{{ struct
+    wayland-util.h,
+    wl_array,
+    size, CSize,
+    alloc, CSize,
+    data, Ptr ()
+}}
