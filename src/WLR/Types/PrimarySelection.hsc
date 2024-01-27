@@ -1,5 +1,10 @@
 module WLR.Types.PrimarySelection where
 
+import Foreign.Ptr (Ptr)
+
+import WL.Utils (WL_array)
+import WL.ServerCore (WL_signal)
+
 {{ struct wlr/types/wlr_primary_selection.h, wlr_primary_selection_source_impl }}
 
 {{ struct

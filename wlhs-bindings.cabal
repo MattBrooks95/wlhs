@@ -24,6 +24,7 @@ library
         WL.Keyboard
         WL.ServerProtocol
         WL.Utils
+        WL.Global
         WL.Version
         WLR.Backend
         WLR.Render.Allocator
@@ -37,6 +38,7 @@ library
         WLR.Types.KeyboardGroup
         WLR.Types.DataDevice
         WLR.Types.Seat
+        WLR.Types.PrimarySelection
         WLR.Util.Addon
         WLR.Util.Box
         WLR.Util.Edges

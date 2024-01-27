@@ -3,7 +3,73 @@ module WLR.Types.Seat where
 #include <time.h>
 
 import Foreign.C.String (CString)
-import Foreign.C.Types (CUInt)
+import Foreign.C.Types (CUInt, CDouble)
+import Foreign.Ptr (Ptr)
+
+import WL.Types.ServerProtocol (WL_display)
+import WL.ServerCore (WL_signal, WL_listener, WL_list)
+import WL.Global (WL_global)
+
+import WLR.Types.DataDevice (WLR_drag, WLR_data_source)
+import WLR.Types.PrimarySelection (WLR_primary_selection_source)
+import WLR.Types.Compositor (WLR_surface)
+
+#define WLR_POINTER_BUTTONS_CAP 16
+
+-- TODO WLR_seat_client
+-- TODO array type uint32_t buttons[WLR_POINTER_BUTTONS_CAP];
+{{ struct
+    wlr/types/wlr_seat.h,
+    wlr_seat_pointer_state,
+    seat, Ptr WLR_seat,
+    focused_client, Ptr WLR_seat_client,
+    focused_surface, Ptr WLR_Surface,
+    sx, CDouble,
+    sy, CDouble,
+    grab, Ptr WLR_seat_pointer_grab,
+    default_grab, Ptr WLR_seat_pointer_grab,
+    sent_axis_source, CBool,
+    cached_axis_source, WLR_axis_source,
+    buttons, Ptr (),
+    button_count, CSize,
+    grab_button, CUInt,
+    grab_serial, CUInt,
+    grab_time, CUInt,
+    surface_destroy, WL_listener,
+    events focus_change, WL_signal,
+}}
+
+struct wlr_seat_keyboard_state {
+	struct wlr_seat *seat;
+	struct wlr_keyboard *keyboard;
+
+	struct wlr_seat_client *focused_client;
+	struct wlr_surface *focused_surface;
+
+	struct wl_listener keyboard_destroy;
+	struct wl_listener keyboard_keymap;
+	struct wl_listener keyboard_repeat_info;
+
+	struct wl_listener surface_destroy;
+
+	struct wlr_seat_keyboard_grab *grab;
+	struct wlr_seat_keyboard_grab *default_grab;
+
+	struct {
+		struct wl_signal focus_change; // struct wlr_seat_keyboard_focus_change_event
+	} events;
+};
+
+struct wlr_seat_touch_state {
+	struct wlr_seat *seat;
+	struct wl_list touch_points; // wlr_touch_point.link
+
+	uint32_t grab_serial;
+	uint32_t grab_id;
+
+	struct wlr_seat_touch_grab *grab;
+	struct wlr_seat_touch_grab *default_grab;
+};
 
 {{ struct
     wlr/types/wlr_seat.h,
