@@ -1,5 +1,8 @@
 module WLR.Types.DataDevice where
 
+#define WLR_USE_UNSTABLE
+#include <wlr/types/wlr_data_device.h>
+
 import Foreign.Ptr (Ptr)
 import Foreign.C.Types (CUInt, CBool)
 
@@ -13,10 +16,10 @@ import WL.Utils (WL_array)
     impl, Ptr WLR_data_source_impl,
     mime_types, WL_array,
     actions, CUInt,
-    accepted, Bool,
+    accepted, CBool,
     current_dnd_action, WL_data_device_manager_dnd_action,
     compositor_action, CUInt,
-    events wl_signal_destroy, WL_signal
+    events destroy, WL_signal
 }}
 
 {{ struct
