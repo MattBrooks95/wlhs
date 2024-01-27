@@ -1,6 +1,7 @@
 module WLR.Types.DataDevice where
 
 import Foreign.Ptr (Ptr)
+import Foreign.C.Types (CUInt, CBool)
 
 import WL.Utils (WL_array)
 
@@ -17,6 +18,7 @@ import WL.Utils (WL_array)
     compositor_action, CUInt,
     events wl_signal_destroy, WL_signal
 }}
+
 {{ struct
     wlr/types/wlr_data_device.h,
     wlr_drag,
@@ -33,20 +35,14 @@ import WL.Utils (WL_array)
     started, CBool,
     dropped, CBool,
     cancelling, CBool,
-    //TODO resume here
+    grab_touch_id, CUInt,
+    touch_id, CUInt,
+    events focus, WL_signal,
+    events motion, WL_signal,
+    events drop, WL_signal,
+    events destroy, WL_signal,
+    source_destroy, WL_listener,
+    seat_client_destroy, WL_listener,
+    icon_destroy, WL_listener,
+    data, Ptr ()
 }}
---	int32_t grab_touch_id, touch_id; // if WLR_DRAG_GRAB_TOUCH
---
---	struct {
---		struct wl_signal focus;
---		struct wl_signal motion; // struct wlr_drag_motion_event
---		struct wl_signal drop; // struct wlr_drag_drop_event
---		struct wl_signal destroy;
---	} events;
---
---	struct wl_listener source_destroy;
---	struct wl_listener seat_client_destroy;
---	struct wl_listener icon_destroy;
---
---	void *data;
---};

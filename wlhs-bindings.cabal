@@ -35,8 +35,8 @@ library
         WLR.Types.Pointer
         WLR.Types.Keyboard
         WLR.Types.KeyboardGroup
-        WLR.Types.Seat
         WLR.Types.DataDevice
+        WLR.Types.Seat
         WLR.Util.Addon
         WLR.Util.Box
         WLR.Util.Edges
