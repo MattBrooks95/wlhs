@@ -39,37 +39,32 @@ import WLR.Types.Compositor (WLR_surface)
     events focus_change, WL_signal,
 }}
 
-struct wlr_seat_keyboard_state {
-	struct wlr_seat *seat;
-	struct wlr_keyboard *keyboard;
+{{ struct
+    wlr/types/wlr_seat.h,
+    wlr_seat_keyboard_state,
+    seat, Ptr WLR_seat,
+    keyboard, Ptr WLR_keyboard,
+    focused_client, Ptr WLR_seat_client,
+    focused_surface, Ptr WLR_surface,
+    keyboard_destroy, WL_listener,
+    keyboard_keymap, WL_listener,
+    keyboard_keyboard_repeat_info, WL_listener,
+    surface_destroy, WL_listener,
+    grab, Ptr WLR_seat_keyboard_grab,
+    default_grab, Ptr WLR_seat_keyboard_grab,
+    events focus_change, WL_signal,
+}}
 
-	struct wlr_seat_client *focused_client;
-	struct wlr_surface *focused_surface;
-
-	struct wl_listener keyboard_destroy;
-	struct wl_listener keyboard_keymap;
-	struct wl_listener keyboard_repeat_info;
-
-	struct wl_listener surface_destroy;
-
-	struct wlr_seat_keyboard_grab *grab;
-	struct wlr_seat_keyboard_grab *default_grab;
-
-	struct {
-		struct wl_signal focus_change; // struct wlr_seat_keyboard_focus_change_event
-	} events;
-};
-
-struct wlr_seat_touch_state {
-	struct wlr_seat *seat;
-	struct wl_list touch_points; // wlr_touch_point.link
-
-	uint32_t grab_serial;
-	uint32_t grab_id;
-
-	struct wlr_seat_touch_grab *grab;
-	struct wlr_seat_touch_grab *default_grab;
-};
+{{ struct
+    wlr/types/wlr_seat.h,
+    wlr_seat_touch_state,
+    seat, Ptr WLR_seat,
+    touch_points, WL_list,
+    grab_serial, CUInt,
+    grab_id, CUInt,
+    grab, Ptr WLR_seat_touch_grab,
+    default_grab, Ptr WLR_seat_touch_grab,
+}}
 
 {{ struct
     wlr/types/wlr_seat.h,
