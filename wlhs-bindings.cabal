@@ -26,6 +26,7 @@ library
         WL.Utils
         WL.Global
         WL.Version
+        WL.Client
         WLR.Backend
         WLR.Render.Allocator
         WLR.Render.Texture

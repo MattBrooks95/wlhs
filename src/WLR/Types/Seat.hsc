@@ -9,62 +9,13 @@ import Foreign.Ptr (Ptr)
 import WL.Types.ServerProtocol (WL_display)
 import WL.ServerCore (WL_signal, WL_listener, WL_list)
 import WL.Global (WL_global)
+import WL.Client (WL_client)
 
 import WLR.Types.DataDevice (WLR_drag, WLR_data_source)
 import WLR.Types.PrimarySelection (WLR_primary_selection_source)
 import WLR.Types.Compositor (WLR_surface)
 
-#define WLR_POINTER_BUTTONS_CAP 16
-
--- TODO WLR_seat_client
--- TODO array type uint32_t buttons[WLR_POINTER_BUTTONS_CAP];
-{{ struct
-    wlr/types/wlr_seat.h,
-    wlr_seat_pointer_state,
-    seat, Ptr WLR_seat,
-    focused_client, Ptr WLR_seat_client,
-    focused_surface, Ptr WLR_Surface,
-    sx, CDouble,
-    sy, CDouble,
-    grab, Ptr WLR_seat_pointer_grab,
-    default_grab, Ptr WLR_seat_pointer_grab,
-    sent_axis_source, CBool,
-    cached_axis_source, WLR_axis_source,
-    buttons, Ptr (),
-    button_count, CSize,
-    grab_button, CUInt,
-    grab_serial, CUInt,
-    grab_time, CUInt,
-    surface_destroy, WL_listener,
-    events focus_change, WL_signal,
-}}
-
-{{ struct
-    wlr/types/wlr_seat.h,
-    wlr_seat_keyboard_state,
-    seat, Ptr WLR_seat,
-    keyboard, Ptr WLR_keyboard,
-    focused_client, Ptr WLR_seat_client,
-    focused_surface, Ptr WLR_surface,
-    keyboard_destroy, WL_listener,
-    keyboard_keymap, WL_listener,
-    keyboard_keyboard_repeat_info, WL_listener,
-    surface_destroy, WL_listener,
-    grab, Ptr WLR_seat_keyboard_grab,
-    default_grab, Ptr WLR_seat_keyboard_grab,
-    events focus_change, WL_signal,
-}}
-
-{{ struct
-    wlr/types/wlr_seat.h,
-    wlr_seat_touch_state,
-    seat, Ptr WLR_seat,
-    touch_points, WL_list,
-    grab_serial, CUInt,
-    grab_id, CUInt,
-    grab, Ptr WLR_seat_touch_grab,
-    default_grab, Ptr WLR_seat_touch_grab,
-}}
+type TODOArray = ()
 
 {{ struct
     wlr/types/wlr_seat.h,
@@ -107,4 +58,80 @@ import WLR.Types.Compositor (WLR_surface)
     events start_drag, WL_signal,
     events destroy, WL_signal,
     data, Ptr ()
+}}
+
+
+#define WLR_POINTER_BUTTONS_CAP 16
+
+-- TODO arrays
+--struct {
+--    int32_t acc_discrete[2];
+--    int32_t last_discrete[2];
+--    double acc_axis[2];
+--} value120;
+{{ struct
+    wlr/types/wlr_seat.h,
+    wlr_seat_client,
+    client, Ptr WL_client,
+    seat, Ptr WLR_seat,
+    link, WL_list,
+    resources, WL_list,
+    pointers, WL_list,
+    keyboards, WL_list,
+    touches, WL_list,
+    data_devices, WL_list,
+    events destroy, WL_signal,
+    needs_touch_frame, CBool,
+    value120 acc_discrete, TODOArray,
+    value120 last_discrete, TODOArray,
+    value120 acc_axis, TODOArray,
+}}
+
+-- TODO array type uint32_t buttons[WLR_POINTER_BUTTONS_CAP];
+{{ struct
+    wlr/types/wlr_seat.h,
+    wlr_seat_pointer_state,
+    seat, Ptr WLR_seat,
+    focused_client, Ptr WLR_seat_client,
+    focused_surface, Ptr WLR_Surface,
+    sx, CDouble,
+    sy, CDouble,
+    grab, Ptr WLR_seat_pointer_grab,
+    default_grab, Ptr WLR_seat_pointer_grab,
+    sent_axis_source, CBool,
+    cached_axis_source, WLR_axis_source,
+    buttons, TODOArray,
+    button_count, CSize,
+    grab_button, CUInt,
+    grab_serial, CUInt,
+    grab_time, CUInt,
+    surface_destroy, WL_listener,
+    events focus_change, WL_signal,
+}}
+
+{{ struct
+    wlr/types/wlr_seat.h,
+    wlr_seat_keyboard_state,
+    seat, Ptr WLR_seat,
+    keyboard, Ptr WLR_keyboard,
+    focused_client, Ptr WLR_seat_client,
+    focused_surface, Ptr WLR_surface,
+    keyboard_destroy, WL_listener,
+    keyboard_keymap, WL_listener,
+    keyboard_keyboard_repeat_info, WL_listener,
+    surface_destroy, WL_listener,
+    grab, Ptr WLR_seat_keyboard_grab,
+    default_grab, Ptr WLR_seat_keyboard_grab,
+    events focus_change, WL_signal,
+}}
+
+{{ struct
+    wlr/types/wlr_seat.h,
+    wlr_seat_touch_state,
+    seat, Ptr WLR_seat,
+    touch_points, WL_list,
+    grab_serial, CUInt,
+    grab_id, CUInt,
+    grab, Ptr WLR_seat_touch_grab,
+    default_grab, Ptr WLR_seat_touch_grab,
 }}
