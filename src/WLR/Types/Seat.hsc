@@ -2,8 +2,11 @@ module WLR.Types.Seat where
 
 #include <time.h>
 
+#define WLR_USE_UNSTABLE
+#include <wlr/types/wlr_seat.h>
+
 import Foreign.C.String (CString)
-import Foreign.C.Types (CUInt, CDouble)
+import Foreign.C.Types (CUInt, CDouble, CInt)
 import Foreign.Ptr (Ptr)
 
 import WL.Types.ServerProtocol (WL_display)
@@ -15,53 +18,24 @@ import WLR.Types.DataDevice (WLR_drag, WLR_data_source)
 import WLR.Types.PrimarySelection (WLR_primary_selection_source)
 import WLR.Types.Compositor (WLR_surface)
 
-type TODOArray = ()
+type TODOArray = Ptr ()
+
+data WLR_seat
 
 {{ struct
     wlr/types/wlr_seat.h,
-    WLR_seat,
-    global, Ptr WL_global,
-    display, Ptr WL_display,
-    clients, Ptr WL_list,
-    name, CString,
-    capabilities, CUInt,
-    accumulated_capabilities, CUInt,
-    last_event, timespec,
-    selection_source, Ptr WLR_data_source,
-    selection_serial, CUInt,
-    selection_offers, WL_list,
-    primary_selection_source, WLR_primary_selection_source
-    primary_selection_serial, CUInt,
-    drag, Ptr WLR_drag,
-    drag_source, Ptr WLR_data_source,
-    drag_serial, CUInt,
-    drag_offers, WL_list,
-    pointer_state, WLR_seat_pointer_state,
-    keyboard_state, WLR_seat_keyboard_state,
-    touch_state, WLR_seat_touch_state,
-    display_destroy, WL_listener,
-    selection_source_destroy, WL_listener,
-    primary_selection_source_destroy, WL_listener,
-    drag_source_destroy, WL_listener,
-    events pointer_grab_begin, WL_signal,
-    events pointer_grab_end, WL_signal,
-    events keyboard_grab_begin, WL_signal,
-    events keyboard_grab_end, WL_signal,
-    events touch_grab_begin, WL_signal,
-    events touch_grab_end, WL_signal,
-    events request_set_cursor, WL_signal,
-    events request_set_selection, WL_signal,
-    events set_selection, WL_signal,
-    events request_set_primary_selection, WL_signal,
-    events set_primary_selection, WL_signal,
-    events request_start_drag, WL_signal,
-    events start_drag, WL_signal,
-    events destroy, WL_signal,
-    data, Ptr ()
+    wlr_serial_range,
+    min_incl, CUInt,
+    max_incl, CUInt
 }}
 
-
-#define WLR_POINTER_BUTTONS_CAP 16
+{{ struct
+    wlr/types/wlr_seat.h,
+    wlr_serial_ringset,
+    data, TODOArray,
+    end, CInt,
+    count, CInt
+}}
 
 -- TODO arrays
 --struct {
@@ -81,6 +55,7 @@ type TODOArray = ()
     touches, WL_list,
     data_devices, WL_list,
     events destroy, WL_signal,
+    serials, WLR_serial_ringset,
     needs_touch_frame, CBool,
     value120 acc_discrete, TODOArray,
     value120 last_discrete, TODOArray,
@@ -118,7 +93,7 @@ type TODOArray = ()
     focused_surface, Ptr WLR_surface,
     keyboard_destroy, WL_listener,
     keyboard_keymap, WL_listener,
-    keyboard_keyboard_repeat_info, WL_listener,
+    keyboard_repeat_info, WL_listener,
     surface_destroy, WL_listener,
     grab, Ptr WLR_seat_keyboard_grab,
     default_grab, Ptr WLR_seat_keyboard_grab,
@@ -135,3 +110,47 @@ type TODOArray = ()
     grab, Ptr WLR_seat_touch_grab,
     default_grab, Ptr WLR_seat_touch_grab,
 }}
+
+{{ struct
+    wlr/types/wlr_seat.h,
+    wlr_seat,
+    global, Ptr WL_global,
+    display, Ptr WL_display,
+    clients, Ptr WL_list,
+    name, CString,
+    capabilities, CUInt,
+    accumulated_capabilities, CUInt,
+    last_event, timespec,
+    selection_source, Ptr WLR_data_source,
+    selection_serial, CUInt,
+    selection_offers, WL_list,
+    primary_selection_source, Ptr WLR_primary_selection_source,
+    primary_selection_serial, CUInt,
+    drag, Ptr WLR_drag,
+    drag_source, Ptr WLR_data_source,
+    drag_serial, CUInt,
+    drag_offers, WL_list,
+    pointer_state, WLR_seat_pointer_state,
+    keyboard_state, WLR_seat_keyboard_state,
+    touch_state, WLR_seat_touch_state,
+    display_destroy, WL_listener,
+    selection_source_destroy, WL_listener,
+    primary_selection_source_destroy, WL_listener,
+    drag_source_destroy, WL_listener,
+    events pointer_grab_begin, WL_signal,
+    events pointer_grab_end, WL_signal,
+    events keyboard_grab_begin, WL_signal,
+    events keyboard_grab_end, WL_signal,
+    events touch_grab_begin, WL_signal,
+    events touch_grab_end, WL_signal,
+    events request_set_cursor, WL_signal,
+    events request_set_selection, WL_signal,
+    events set_selection, WL_signal,
+    events request_set_primary_selection, WL_signal,
+    events set_primary_selection, WL_signal,
+    events request_start_drag, WL_signal,
+    events start_drag, WL_signal,
+    events destroy, WL_signal,
+    data, Ptr ()
+}}
+

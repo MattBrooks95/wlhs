@@ -1,4 +1,4 @@
 {-# LANGUAGE EmptyDataDecls #-}
-module WL.client where
+module WL.Client where
 
 data WL_Client

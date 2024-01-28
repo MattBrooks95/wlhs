@@ -7,6 +7,7 @@ import Foreign.Ptr (Ptr)
 import Foreign.C.Types (CUInt, CBool)
 
 import WL.Utils (WL_array)
+import WL.ServerProtocol (WL_data_device_manager_dnd_action)
 
 {{ struct wlr/types/wlr_data_device.h, wlr_data_source_impl }}
 
