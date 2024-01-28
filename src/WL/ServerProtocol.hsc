@@ -1,33 +1,20 @@
+{-# LANGUAGE PatternSynonyms #-}
 module WL.ServerProtocol where
 
 #include <wayland-server-protocol.h>
 
-data {-# CTYPE "wayland-server-core.h" "struct wl_display" #-} WL_display
+import Foreign.C.Types (CInt)
 
-{{ enum
-    wayland-server-protocol.h,
-    wl_data_device_manager_dnd_action,
-    WL_DATA_DEVICE_MANAGER_DND_ACTION_NONE,
-    WL_DATA_DEVICE_MANAGER_DND_ACTION_COPY,
-    WL_DATA_DEVICE_MANAGER_DND_ACTION_MOVE,
-    WL_DATA_DEVICE_MANAGER_DND_ACTION_ASK,
-}}
+type WL_data_device_manager_dnd_action = CInt
 
-enum wl_data_device_manager_dnd_action {
-	/**
-	 * no action
-	 */
-	WL_DATA_DEVICE_MANAGER_DND_ACTION_NONE = 0,
-	/**
-	 * copy action
-	 */
-	WL_DATA_DEVICE_MANAGER_DND_ACTION_COPY = 1,
-	/**
-	 * move action
-	 */
-	WL_DATA_DEVICE_MANAGER_DND_ACTION_MOVE = 2,
-	/**
-	 * ask action
-	 */
-	WL_DATA_DEVICE_MANAGER_DND_ACTION_ASK = 4,
-};
+pattern WL_DATA_DEVICE_MANAGER_DND_ACTION_NONE :: (Eq a, Num a) => a
+pattern WL_DATA_DEVICE_MANAGER_DND_ACTION_NONE = 0
+
+pattern WL_DATA_DEVICE_MANAGER_DND_ACTION_COPY :: (Eq a, Num a) => a
+pattern WL_DATA_DEVICE_MANAGER_DND_ACTION_COPY = 1
+
+pattern WL_DATA_DEVICE_MANAGER_DND_ACTION_MOVE :: (Eq a, Num a) => a
+pattern WL_DATA_DEVICE_MANAGER_DND_ACTION_MOVE = 2
+
+pattern WL_DATA_DEVICE_MANAGER_DND_ACTION_ASK :: (Eq a, Num a) => a
+pattern WL_DATA_DEVICE_MANAGER_DND_ACTION_ASK = 4

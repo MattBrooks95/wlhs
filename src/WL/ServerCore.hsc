@@ -59,3 +59,5 @@ data WL_resource
 
 type WL_resource_destroy_func_t = FunPtr (Ptr WL_resource -> IO ())
 --typedef void (*wl_resource_destroy_func_t)(struct wl_resource *resource);
+
+data {-# CTYPE "wayland-server-core.h" "struct wl_display" #-} WL_display

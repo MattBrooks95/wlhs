@@ -1,13 +1,23 @@
+{-# LANGUAGE PatternSynonyms #-}
 module WLR.Types.DataDevice where
 
 #define WLR_USE_UNSTABLE
 #include <wlr/types/wlr_data_device.h>
 
 import Foreign.Ptr (Ptr)
-import Foreign.C.Types (CUInt, CBool)
+import Foreign.C.Types (CUInt, CBool, CInt)
+import Foreign.Storable (Storable(..))
 
 import WL.Utils (WL_array)
 import WL.ServerProtocol (WL_data_device_manager_dnd_action)
+import WL.ServerCore (WL_signal)
+
+-- TODO break up this import cycle with a hs-boot file
+import WLR.Types.Seat (
+    WLR_seat_keyboard_grab
+    , WLR_seat_pointer_grab
+    , WLR_seat_touch_grab
+    )
 
 {{ struct wlr/types/wlr_data_device.h, wlr_data_source_impl }}
 
@@ -21,6 +31,13 @@ import WL.ServerProtocol (WL_data_device_manager_dnd_action)
     current_dnd_action, WL_data_device_manager_dnd_action,
     compositor_action, CUInt,
     events destroy, WL_signal
+}}
+
+{{ enum
+    WLR_drag_grab_type,
+    WLR_DRAG_GRAB_KEYBOARD,
+    WLR_DRAG_GRAB_KEYBOARD_POINTER,
+    WLR_DRAG_GRAB_KEYBOARD_TOUCH
 }}
 
 {{ struct

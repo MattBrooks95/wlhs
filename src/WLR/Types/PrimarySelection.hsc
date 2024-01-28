@@ -4,6 +4,7 @@ module WLR.Types.PrimarySelection where
 #include <wlr/types/wlr_primary_selection.h>
 
 import Foreign.Ptr (Ptr)
+import Foreign.Storable (Storable(..))
 
 import WL.Utils (WL_array)
 import WL.ServerCore (WL_signal)
