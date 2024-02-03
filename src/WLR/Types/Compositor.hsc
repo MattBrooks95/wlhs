@@ -1,62 +1,31 @@
-{- LANGUAGE PatternSynonyms -}
+{-# LANGUAGE PatternSynonyms #-}
 module WLR.Types.Compositor where
+
 import WLR.Types.Buffer (WLR_client_buffer)
 import WL.ServerCore (WL_resource)
 
-#include <wlr/types/wlr_types_compositor.h>
+#define WLR_USE_UNSTABLE
+#include <wlr/types/wlr_compositor.h>
 
 --WLR_surface
 -- the 'resource' field had a source comment, "//may be NULL"
 {{ struct
-    wlr/types/wlr_types_compositor.h,
+    wlr/types/wlr_compositor.h,
     wlr_surface,
-
     resource, Ptr WL_resource,
     renderer, Maybe (Ptr WLR_renderer),
     buffer, WLR_client_buffer,
     buffer_damage, -- pixman_region32_t
-    /**
-     * The last commit's damage caused by surface and its subsurfaces'
-     * movement, in surface-local coordinates.
-     */
-    pixman_region32_t external_damage;
-    /**
-     * The current opaque region, in surface-local coordinates. It is clipped to
-     * the surface bounds. If the surface's buffer is using a fully opaque
-     * format, this is set to the whole surface.
-     */
-    pixman_region32_t opaque_region;
-    /**
-     * The current input region, in surface-local coordinates. It is clipped to
-     * the surface bounds.
-     *
-     * If the protocol states that the input region is ignored, this is empty.
-     */
-    pixman_region32_t input_region;
-    /**
-     * `current` contains the current, committed surface state. `pending`
-     * accumulates state changes from the client between commits and shouldn't
-     * be accessed by the compositor directly.
-     */
-    struct wlr_surface_state current, pending;
+    external_damage, pixman_region_32,
+    opaque_region, pixman_region_32,
+    input_region, pixman_region_32,
+    current, WLR_surface_state,
+    pending, WLR_surface_state,
+    cached, WL_list,
+    mapped, CBool,
+    role, Ptr WLR_surface_role,
+    role_resource, Ptr WL_resource,
 
-    struct wl_list cached; // wlr_surface_state.cached_link
-
-    /**
-     * Whether the surface is ready to be displayed.
-     */
-    bool mapped;
-
-    /**
-     * The lifetime-bound role of the surface. NULL if the role was never set.
-     */
-    const struct wlr_surface_role *role;
-
-    /**
-     * The role object representing the role. NULL if the role isn't
-     * represented by any object or the object was destroyed.
-     */
-    struct wl_resource *role_resource;
 
     struct {
         struct wl_signal client_commit;

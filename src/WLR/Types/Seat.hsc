@@ -9,12 +9,13 @@ import Foreign.C.String (CString)
 import Foreign.C.Types (CUInt, CDouble, CInt)
 import Foreign.Ptr (Ptr)
 
-import WL.Types.ServerProtocol (WL_display)
-import WL.ServerCore (WL_signal, WL_listener, WL_list)
+import WL.ServerProtocol (WL_display)
+import WL.ServerCore (WL_signal, WL_listener)
 import WL.Global (WL_global)
 import WL.Client (WL_client)
+import WL.Utils (WL_list)
 
-import WLR.Types.DataDevice (WLR_drag, WLR_data_source)
+import {-# SOURCE #-} WLR.Types.DataDevice (WLR_drag, WLR_data_source)
 import WLR.Types.PrimarySelection (WLR_primary_selection_source)
 import WLR.Types.Compositor (WLR_surface)
 

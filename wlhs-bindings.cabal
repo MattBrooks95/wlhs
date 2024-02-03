@@ -32,6 +32,7 @@ library
         WLR.Render.Texture
         WLR.Render.DrmFormatSet
         WLR.Render.Renderer
+        WLR.Types.Compositor
         WLR.Types.Buffer
         WLR.Types.InputDevice
         WLR.Types.Pointer
