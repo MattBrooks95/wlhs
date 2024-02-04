@@ -7,6 +7,7 @@ import Foreign.Ptr (Ptr)
 
 import WL.Utils (WL_list)
 import WL.ServerCore (WL_resource, WL_signal, WL_listener)
+import WL.ServerProtocol (WL_output_transform)
 
 import WLR.Types.Buffer (WLR_client_buffer, WLR_buffer)
 import WLR.Render.Renderer (WLR_renderer)
