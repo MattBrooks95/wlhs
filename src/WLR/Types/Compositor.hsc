@@ -12,6 +12,8 @@ import WL.ServerProtocol (WL_output_transform)
 
 import WLR.Types.Buffer (WLR_client_buffer, WLR_buffer)
 import WLR.Render.Renderer (WLR_renderer)
+import WLR.Util.Box (WLR_fbox)
+import WLR.Util.Addon (WLR_addon_set)
 
 import Pixman.Types.Region (PIXMAN_region_32)
 
