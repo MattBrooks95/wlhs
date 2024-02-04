@@ -4,5 +4,5 @@ module Pixman.Types.Region where
 
 {{ struct
     pixman.h,
-    pixman_region_32
+    pixman_region32
 }}

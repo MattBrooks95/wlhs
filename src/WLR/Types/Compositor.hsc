@@ -15,7 +15,7 @@ import WLR.Render.Renderer (WLR_renderer)
 import WLR.Util.Box (WLR_fbox)
 import WLR.Util.Addon (WLR_addon_set)
 
-import Pixman.Types.Region (PIXMAN_region_32)
+import Pixman.Types.Region (PIXMAN_region32)
 
 #define WLR_USE_UNSTABLE
 #include <wlr/types/wlr_compositor.h>
@@ -31,10 +31,10 @@ import Pixman.Types.Region (PIXMAN_region_32)
     resource, Ptr WL_resource,
     renderer, Maybe (Ptr WLR_renderer),
     buffer, WLR_client_buffer,
-    buffer_damage,  PIXMAN_region_32,
-    external_damage, PIXMAN_region_32,
-    opaque_region, PIXMAN_region_32,
-    input_region, PIXMAN_region_32,
+    buffer_damage,  PIXMAN_region32,
+    external_damage, PIXMAN_region32,
+    opaque_region, PIXMAN_region32,
+    input_region, PIXMAN_region32,
     current, WLR_surface_state,
     pending, WLR_surface_state,
     cached, WL_list,
@@ -74,10 +74,10 @@ import Pixman.Types.Region (PIXMAN_region_32)
     buffer, Ptr WLR_buffer,
     dx, CUInt,
     dy, CUInt,
-    surface_damage, PIXMAN_region_32,
-    buffer_damage, PIXMAN_region_32,
-    opaque, PIXMAN_region_32,
-    input, PIXMAN_region_32,
+    surface_damage, PIXMAN_region32,
+    buffer_damage, PIXMAN_region32,
+    opaque, PIXMAN_region32,
+    input, PIXMAN_region32,
     transform, WL_output_transform,
     scale, CInt,
     frame_callback_list, WL_list,
