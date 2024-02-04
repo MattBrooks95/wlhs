@@ -2,8 +2,9 @@
 module WLR.Types.Compositor where
 
 import Foreign.C.Types (CBool, CInt, CSize, CUInt)
+import Foreign.C.String (CString)
 import Foreign.Storable (Storable(..))
-import Foreign.Ptr (Ptr)
+import Foreign.Ptr (Ptr, FunPtr)
 
 import WL.Utils (WL_list)
 import WL.ServerCore (WL_resource, WL_signal, WL_listener)
@@ -90,5 +91,15 @@ import Pixman.Types.Region (PIXMAN_region_32)
     viewport dst_width, CInt,
     viewport dst_height, CInt,
     cached_state_locks, CSize,
-    cached_state_link, WL_list,
+    cached_state_link, WL_list
+}}
+
+{{ struct
+    wlr/types/wlr_compositor.h,
+    wlr_surface_role,
+    name, CString,
+    no_object, CBool,
+    commit, FunPtr (Ptr WLR_surface -> IO ()),
+    unmap, FunPtr (Ptr WLR_surface -> IO ()),
+    destroy, FunPtr (Ptr WLR_surface -> IO())
 }}
