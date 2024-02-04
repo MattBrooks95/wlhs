@@ -29,7 +29,7 @@ import Pixman.Types.Region (PIXMAN_region32)
     wlr/types/wlr_compositor.h,
     wlr_surface,
     resource, Ptr WL_resource,
-    renderer, Maybe (Ptr WLR_renderer),
+    renderer, Ptr WLR_renderer,
     buffer, WLR_client_buffer,
     buffer_damage,  PIXMAN_region32,
     external_damage, PIXMAN_region32,

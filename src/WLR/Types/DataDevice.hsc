@@ -10,13 +10,18 @@ import Foreign.Storable (Storable(..))
 
 import WL.Utils (WL_array)
 import WL.ServerProtocol (WL_data_device_manager_dnd_action)
-import WL.ServerCore (WL_signal)
+import WL.ServerCore (WL_signal, WL_listener)
+
+import WLR.Types.Compositor (WLR_surface)
 
 -- TODO break up this import cycle with a hs-boot file
-import WLR.Types.Seat (
+import {-# SOURCE #-} WLR.Types.Seat (
     WLR_seat_keyboard_grab
     , WLR_seat_pointer_grab
     , WLR_seat_touch_grab
+    , WLR_seat_client
+    , WLR_seat
+    , WLR_drag_icon
     )
 
 {{ struct wlr/types/wlr_data_device.h, wlr_data_source_impl }}

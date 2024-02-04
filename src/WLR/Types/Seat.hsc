@@ -7,7 +7,7 @@ module WLR.Types.Seat where
 
 import Foreign.C.String (CString)
 import Foreign.C.Types (CUInt, CDouble, CInt)
-import Foreign.Ptr (Ptr)
+import Foreign.Ptr (Ptr, ConstPtr)
 
 import WL.ServerProtocol (WL_display)
 import WL.ServerCore (WL_signal, WL_listener)
@@ -15,7 +15,7 @@ import WL.Global (WL_global)
 import WL.Client (WL_client)
 import WL.Utils (WL_list)
 
-import {-# SOURCE #-} WLR.Types.DataDevice (WLR_drag, WLR_data_source)
+import WLR.Types.DataDevice (WLR_drag, WLR_data_source)
 import WLR.Types.PrimarySelection (WLR_primary_selection_source)
 import WLR.Types.Compositor (WLR_surface)
 
@@ -155,3 +155,21 @@ data WLR_seat
     data, Ptr ()
 }}
 
+{{ struct
+    wlr/types/wlr_seat.h,
+    wlr_seat_keyboard_grab,
+    interface, ConstPtr WLR_keyboard_grab_interface,
+    seat, Ptr WLR_seat,
+    data, Ptr ()
+}}
+
+-- TODO enter's CUInt final parameter is a const array
+{{ struct
+    wlr/types/wlr_seat.h,
+    wlr_keyboard_grab_interface,
+    enter, FunPtr (Ptr WLR_seat_keyboard_grab -> Ptr WLR_surface -> CUInt -> IO ()),
+    clear_focus, FunPtr (Ptr WLR_seat_keyboard_grab -> IO ()),
+    key, FunPtr (Ptr WLR_seat_keyboard_grab -> CUInt -> CUInt -> CUInt -> IO ()),
+    modifiers, FunPtr (Ptr WLR_seat_keyboard_grab -> Ptr WLR_keyboard_modifiers -> IO ()),
+    cancel, FunPtr (Ptr WLR_seat_keyboard_grab -> IO ())
+}}
