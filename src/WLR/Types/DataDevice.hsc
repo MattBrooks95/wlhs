@@ -15,7 +15,7 @@ import WL.ServerCore (WL_signal, WL_listener)
 import WLR.Types.Compositor (WLR_surface)
 
 -- TODO break up this import cycle with a hs-boot file
-import {-# SOURCE #-} WLR.Types.Seat (
+import WLR.Types.Seat (
     WLR_seat_keyboard_grab
     , WLR_seat_pointer_grab
     , WLR_seat_touch_grab

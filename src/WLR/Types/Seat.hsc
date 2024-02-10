@@ -6,8 +6,12 @@ module WLR.Types.Seat where
 #include <wlr/types/wlr_seat.h>
 
 import Foreign.C.String (CString)
-import Foreign.C.Types (CUInt, CDouble, CInt)
-import Foreign.Ptr (Ptr, ConstPtr)
+import Foreign.C.Types (CUInt, CDouble, CInt, CBool)
+-- if we upgrade our base libraries we can use this
+-- https://github.com/haskell/core-libraries-committee/issues/118
+-- import Foreign.C.ConstPtr
+import Foreign.Ptr (Ptr, FunPtr)
+import Foreign.Storable (Storable(..))
 
 import WL.ServerProtocol (WL_display)
 import WL.ServerCore (WL_signal, WL_listener)
@@ -15,13 +19,11 @@ import WL.Global (WL_global)
 import WL.Client (WL_client)
 import WL.Utils (WL_list)
 
-import WLR.Types.DataDevice (WLR_drag, WLR_data_source)
+--import {-# SOURCE #-} WLR.Types.DataDevice (WLR_drag, WLR_data_source)
 import WLR.Types.PrimarySelection (WLR_primary_selection_source)
 import WLR.Types.Compositor (WLR_surface)
 
 type TODOArray = Ptr ()
-
-data WLR_seat
 
 {{ struct
     wlr/types/wlr_seat.h,
@@ -63,13 +65,21 @@ data WLR_seat
     value120 acc_axis, TODOArray,
 }}
 
+{{ struct
+    wlr/types/wlr_seat.h,
+    wlr_seat_pointer_grab,
+    interface, Ptr wlr_pointer_grab_interface,
+    seat, Ptr WLR_seat,
+    data, Ptr ()
+}}
+
 -- TODO array type uint32_t buttons[WLR_POINTER_BUTTONS_CAP];
 {{ struct
     wlr/types/wlr_seat.h,
     wlr_seat_pointer_state,
     seat, Ptr WLR_seat,
     focused_client, Ptr WLR_seat_client,
-    focused_surface, Ptr WLR_Surface,
+    focused_surface, Ptr WLR_surface,
     sx, CDouble,
     sy, CDouble,
     grab, Ptr WLR_seat_pointer_grab,
@@ -155,15 +165,18 @@ data WLR_seat
     data, Ptr ()
 }}
 
+-- TODO interface was a ConstPtr
+
 {{ struct
     wlr/types/wlr_seat.h,
     wlr_seat_keyboard_grab,
-    interface, ConstPtr WLR_keyboard_grab_interface,
+    interface, Ptr WLR_keyboard_grab_interface,
     seat, Ptr WLR_seat,
     data, Ptr ()
 }}
 
 -- TODO enter's CUInt final parameter is a const array
+
 {{ struct
     wlr/types/wlr_seat.h,
     wlr_keyboard_grab_interface,

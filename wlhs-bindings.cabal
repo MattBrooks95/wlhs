@@ -28,6 +28,7 @@ library
         WL.Version
         WL.Client
         WLR.Backend
+        WLR.Types.DataDevice
         WLR.Render.Allocator
         WLR.Render.Texture
         WLR.Render.DrmFormatSet
@@ -38,7 +39,6 @@ library
         WLR.Types.Pointer
         WLR.Types.Keyboard
         WLR.Types.KeyboardGroup
-        WLR.Types.DataDevice
         WLR.Types.Seat
         WLR.Types.PrimarySelection
         WLR.Util.Addon
