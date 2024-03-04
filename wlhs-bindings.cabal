@@ -46,6 +46,7 @@ library
         WLR.Types.Output
         WLR.Types.OutputLayer
         WLR.Types.Pointer
+        WLR.Types.Scene
         WLR.Types.Seat
         WLR.Util.Addon
         WLR.Util.Box
