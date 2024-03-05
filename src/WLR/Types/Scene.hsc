@@ -9,8 +9,10 @@ import Foreign.C.Types (CBool(..), CInt(..))
 import Foreign.Ptr (Ptr)
 import PIXMAN.Pixman (PIXMAN_region32)
 import WL.Utils (WL_list)
-import WL.ServerCore (WL_signal)
+import WL.ServerCore (WL_signal, WL_listener)
 import WLR.Util.Addon (WLR_addon_set)
+import WLR.Types.PresentationTime (WLR_presentation)
+import WLR.Types.LinuxDmabuf_v1 (WLR_linux_dmabuf_v1)
 
 {{ enum WLR_scene_node_type,
     WLR_SCENE_NODE_TREE,
@@ -40,4 +42,26 @@ import WLR.Util.Addon (WLR_addon_set)
     data, Ptr WLR_scene_data,
     addons, WLR_addon_set,
     visible, PIXMAN_region32
+}}
+
+{{ enum WLR_scene_debug_damage_option,
+    WLR_SCENE_DEBUG_DAMAGE_NONE,
+    WLR_SCENE_DEBUG_DAMAGE_RERENDER,
+    WLR_SCENE_DEBUG_DAMAGE_HIGHLIGHT
+}}
+
+{- The root scene-graph node.
+ - fields beneath linux_dmabuf_v1 were marked as 'private state'
+ -}
+{{ struct wlr/types/wlr_scene.h,
+    wlr_scene,
+    tree, WLR_scene_tree,
+    outputs, WL_list,
+    presentation, Ptr WLR_presentation,
+    linux_dmabuf_v1, Ptr WLR_linux_dmabuf_v1,
+    presentation_destroy, WL_listener,
+    linux_dmabuf_v1_destroy, WL_listener,
+    debug_damage_option, WLR_scene_debug_damage_option,
+    direct_scanout, CBool,
+    calculate_visibility, CBool
 }}
