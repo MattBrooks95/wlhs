@@ -34,6 +34,7 @@ library
         WLR.Render.Allocator
         WLR.Render.DrmFormatSet
         WLR.Render.Interface
+        WLR.Render.Pass
         WLR.Render.Renderer
         WLR.Render.Swapchain
         WLR.Render.Texture

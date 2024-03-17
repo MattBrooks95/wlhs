@@ -25,6 +25,7 @@ import WLR.Types.Output (WLR_output)
 import WLR.Util.Box (WLR_box, WLR_fbox)
 import WLR.Util.Addon (WLR_addon)
 import WLR.Render.Texture (WLR_texture)
+import WLR.Render.Pass (WLR_scale_filter_mode)
 
 {{ enum WLR_scene_node_type,
     WLR_SCENE_NODE_TREE,
