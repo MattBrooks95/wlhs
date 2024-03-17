@@ -2,11 +2,21 @@ module WLR.Types.LinuxDmabuf_v1 where
 import WL.ServerCore (WL_signal)
 import WL.Global (WL_global)
 
+import WLR.Render.Renderer (WLR_renderer)
+import WLR.Types.Output (WLR_output)
+
 import Foreign.Ptr (Ptr)
 import Foreign.Storable (Storable(..))
 
 #define WLR_USE_UNSTABLE
 #include <wlr/types/wlr_linux_dmabuf_v1.h>
+
+{{ struct wlr/types/wlr_linux_dmabuf_v1.h,
+    wlr_linux_dmabuf_feedback_v1_init_options,
+    main_renderer, Ptr WLR_renderer,
+    scanout_primary_output, Ptr WLR_output,
+    output_layer_feedback_event, Ptr WLR_output_layer_feedback_event,
+}}
 
 {- the protocol interface
  - everything after events.destroy is "private state" and I can't find the
