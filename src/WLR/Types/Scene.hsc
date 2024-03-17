@@ -6,8 +6,8 @@ module WLR.Types.Scene where
 
 import Foreign.Storable (Storable(..))
 import Foreign (Word64, Word8)
-import Foreign.C.Types (CBool(..), CInt(..), CFloat(..))
-import Foreign.Ptr (Ptr)
+import Foreign.C.Types (CBool(..), CInt(..), CFloat(..), CDouble(..))
+import Foreign.Ptr (Ptr, FunPtr)
 
 import PIXMAN.Pixman (PIXMAN_region32)
 
@@ -101,6 +101,18 @@ import WLR.Render.Texture (WLR_texture)
     render_list, WL_array,
 }}
 
+
+-- the wlroots source has a typedef for a function pointer that looks like this
+-- I'm not sure how to declare this using the `foreign import capi` tool, so I 'inlined' the type in the struct field
+--from wlroots:
+--    typedef bool (*wlr_scene_buffer_point_accepts_input_func_t)(
+--      struct wlr_scene_buffer *buffer, double *sx, double *sy);
+--what the capi import could have looked like?
+--foreign import capi "wlr/types/wlr_scene.h wlr_scene_buffer_point_accepts_input_func_t"
+--    wlr_scene_buffer_point_accepts_input_func_t :: Ptr WLR_scene_buffer -> CDouble -> CDouble -> IO (CBool)
+--
+--I just wrote the type out in the (point_accepts_input) field of the (wlr_scene_buffer) struct
+
 {- |`buffer` may be NULL
  - point_accepts_input may be NULL
  -}
@@ -113,7 +125,7 @@ import WLR.Render.Texture (WLR_texture)
     events output_leave, WL_signal,
     events output_sample, WL_signal,
     events frame_done, WL_signal,
-    point_accepts_input, WLR_scene_buffer_point_accepts_input_func_t,
+    point_accepts_input, FunPtr (Ptr WLR_scene_buffer -> CDouble -> CDouble -> IO (CBool)),
     primary_output, Ptr WLR_scene_output,
     opacity, CFloat,
     filter_mode, WLR_scale_filter_mode,
