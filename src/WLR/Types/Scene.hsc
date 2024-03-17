@@ -17,7 +17,7 @@ import WL.ServerProtocol (WL_output_transform)
 
 import WLR.Util.Addon (WLR_addon_set)
 import WLR.Types.PresentationTime (WLR_presentation)
-import WLR.Types.LinuxDmabuf_v1 (WLR_linux_dmabuf_v1)
+import WLR.Types.LinuxDmabuf_v1 (WLR_linux_dmabuf_v1, WLR_linux_dmabuf_feedback_v1_init_options)
 import WLR.Types.Compositor (WLR_surface)
 import WLR.Types.Buffer (WLR_buffer)
 import WLR.Types.DamageRing (WLR_damage_ring)

@@ -4,6 +4,7 @@ import WL.Global (WL_global)
 
 import WLR.Render.Renderer (WLR_renderer)
 import WLR.Types.Output (WLR_output)
+import WLR.Types.OutputLayer (WLR_output_layer_feedback_event)
 
 import Foreign.Ptr (Ptr)
 import Foreign.Storable (Storable(..))
