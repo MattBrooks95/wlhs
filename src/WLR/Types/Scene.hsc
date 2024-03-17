@@ -5,7 +5,7 @@ module WLR.Types.Scene where
 #include<wlr/types/wlr_scene.h>
 
 import Foreign.Storable (Storable(..))
-import Foreign (Word64, Word8)
+import Foreign (Word64, Word8, peekArray, pokeArray, plusPtr)
 import Foreign.C.Types (CBool(..), CInt(..), CFloat(..), CDouble(..))
 import Foreign.Ptr (Ptr, FunPtr)
 
@@ -156,4 +156,15 @@ import WLR.Render.Pass (WLR_scale_filter_mode)
     frame_done, WL_listener,
     surface_destroy, WL_listener,
     surface_commit, WL_listener
+}}
+
+{- |
+ - A scene-graph node displaying a solid-colored rectangle
+ -}
+{{ struct wlr/types/wlr_scene.h,
+    wlr_scene_rect,
+    node, WLR_scene_node,
+    width, CInt,
+    height, CInt,
+    color, [4]CFloat
 }}
