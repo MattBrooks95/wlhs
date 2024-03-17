@@ -1,4 +1,4 @@
-{-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE PatternSynonyms, EmptyDataDeriving #-}
 module WLR.Types.Scene where
 
 #define WLR_USE_UNSTABLE
