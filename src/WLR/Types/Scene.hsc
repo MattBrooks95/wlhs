@@ -6,7 +6,7 @@ module WLR.Types.Scene where
 
 import Foreign.Storable (Storable(..))
 import Foreign (Word64, Word8, peekArray, pokeArray, plusPtr)
-import Foreign.C.Types (CBool(..), CInt(..), CFloat(..), CDouble(..))
+import Foreign.C.Types (CBool(..), CInt(..), CFloat(..), CDouble(..), CSize)
 import Foreign.Ptr (Ptr, FunPtr)
 
 import PIXMAN.Pixman (PIXMAN_region32)
@@ -167,4 +167,16 @@ import WLR.Render.Pass (WLR_scale_filter_mode)
     width, CInt,
     height, CInt,
     color, [4]CFloat
+}}
+
+{{ struct wlr/types/wlr_scene.h,
+    wlr_scene_outputs_update_event,
+    active, Ptr (Ptr WLR_scene_output),
+    size, CSize,
+}}
+
+{{ struct wlr/types/wlr_scene.h,
+    wlr_scene_output_sample_event,
+    output, Ptr WLR_scene_output,
+    direct_scanout, CBool
 }}
