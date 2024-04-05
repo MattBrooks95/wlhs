@@ -44,6 +44,7 @@ library
         WLR.Types.InputDevice
         WLR.Types.Keyboard
         WLR.Types.KeyboardGroup
+        WLR.Types.LayerShellV1
         WLR.Types.LinuxDmabuf_v1
         WLR.Types.PresentationTime
         WLR.Types.PrimarySelection

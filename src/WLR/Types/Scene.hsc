@@ -5,7 +5,7 @@ module WLR.Types.Scene where
 #include<wlr/types/wlr_scene.h>
 
 import Foreign.Storable (Storable(..))
-import Foreign (Word64, Word8, peekArray, pokeArray, plusPtr)
+import Foreign (Word64, Word8, Int64, peekArray, pokeArray, plusPtr)
 import Foreign.C.Types (CBool(..), CInt(..), CFloat(..), CDouble(..), CSize)
 import Foreign.Ptr (Ptr, FunPtr)
 
@@ -22,10 +22,12 @@ import WLR.Types.Compositor (WLR_surface)
 import WLR.Types.Buffer (WLR_buffer)
 import WLR.Types.DamageRing (WLR_damage_ring)
 import WLR.Types.Output (WLR_output)
+import WLR.Types.LayerShellV1 (WLR_layer_surface_v1)
 import WLR.Util.Box (WLR_box, WLR_fbox)
 import WLR.Util.Addon (WLR_addon)
 import WLR.Render.Texture (WLR_texture)
 import WLR.Render.Pass (WLR_scale_filter_mode)
+import WLR.Render.Interface (WLR_render_timer)
 
 {{ enum WLR_scene_node_type,
     WLR_SCENE_NODE_TREE,
@@ -180,3 +182,24 @@ import WLR.Render.Pass (WLR_scale_filter_mode)
     output, Ptr WLR_scene_output,
     direct_scanout, CBool
 }}
+
+{{ struct wlr/types/wlr_scene.h,
+    wlr_scene_timer,
+    pre_render_duration, Int64,
+    render_timer, Ptr WLR_render_timer
+}}
+
+{- |A layer shell scene helper
+ - beneath layer_surface is 'private state'
+ -}
+{-
+{{ struct wlr/types/wlr_scene.h,
+    wlr_scene_layer_surface_v1,
+    tree, Ptr WLR_scene_tree,
+    layer_surface, Ptr WLR_layer_surface_v1,
+    tree_destroy, WL_listener,
+    layer_surface_destroy, WL_listener,
+    layer_surface_map, WL_listener,
+    layer_surface_unmap, WL_listener,
+}}
+-}
