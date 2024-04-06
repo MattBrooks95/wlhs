@@ -192,7 +192,6 @@ import WLR.Render.Interface (WLR_render_timer)
 {- |A layer shell scene helper
  - beneath layer_surface is 'private state'
  -}
-{-
 {{ struct wlr/types/wlr_scene.h,
     wlr_scene_layer_surface_v1,
     tree, Ptr WLR_scene_tree,
@@ -202,4 +201,3 @@ import WLR.Render.Interface (WLR_render_timer)
     layer_surface_map, WL_listener,
     layer_surface_unmap, WL_listener,
 }}
--}
