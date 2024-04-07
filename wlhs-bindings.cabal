@@ -50,6 +50,7 @@ library
         WLR.Types.PrimarySelection
         WLR.Types.Output
         WLR.Types.OutputLayer
+        WLR.Types.OutputLayout
         WLR.Types.Pointer
         WLR.Types.Scene
         WLR.Types.Seat

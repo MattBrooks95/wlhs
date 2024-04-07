@@ -22,6 +22,7 @@ import WLR.Types.Compositor (WLR_surface)
 import WLR.Types.Buffer (WLR_buffer)
 import WLR.Types.DamageRing (WLR_damage_ring)
 import WLR.Types.Output (WLR_output, WLR_output_state)
+import WLR.Types.OutputLayout (WLR_output_layout)
 import WLR.Types.LayerShellV1 (WLR_layer_surface_v1)
 import WLR.Util.Box (WLR_box, WLR_fbox)
 import WLR.Util.Addon (WLR_addon)
@@ -30,6 +31,11 @@ import WLR.Render.Pass (WLR_scale_filter_mode)
 import WLR.Render.Interface (WLR_render_timer)
 
 import Time.Time (TIMESPEC)
+
+-- definitions that only exist in .c files
+-- exist as forward struct definitions in the original wlr_scene.h file
+data WLR_scene_output_layout
+data WLR_scene_output_layout_output
 
 {{ enum WLR_scene_node_type,
     WLR_SCENE_NODE_TREE,
@@ -482,3 +488,58 @@ foreign import capi "wlr/types/wlr_scene.h wlr_scene_output_commit"
  -}
 foreign import capi "wlr/types/wlr_scene.h wlr_scene_output_build_state"
     wlr_scene_output_build_state :: Ptr WLR_scene_output -> Ptr WLR_output_state -> Ptr WLR_scene_output_state_options -> IO CBool
+
+{-
+ - Retrieve the duration in nanoseconds between the last wlr_scene_output_commit() call and the end
+ - of its operations, including those on the GPU that may have finished after the call returned.
+ -
+ - Returns -1 if the duration is unavailable.
+ -}
+foreign import capi "wlr/types/wlr_scene.h wlr_scene_timer_get_duration_ns"
+    wlr_scene_timer_get_duration_ns :: Ptr WLR_scene_timer -> IO Int64
+foreign import capi "wlr/types/wlr_scene.h wlr_scene_timer_finish"
+    wlr_scene_timer_finish :: Ptr WLR_scene_timer -> IO ()
+
+{-
+ - Call wlr_surface_send_frame_done() on all surfaces in the scene rendered by
+ - wlr_scene_output_commit() for which wlr_scene_surface.primary_output
+ - matches the given scene_output.
+ -}
+foreign import capi "wlr/types/wlr_scene.h wlr_scene_output_send_frame_done"
+    wlr_scene_output_send_frame_done :: Ptr WLR_scene_output -> Ptr TIMESPEC -> IO ()
+
+{-
+ - Call `iterator` on each buffer in the scene-graph visible on the output,
+ - with the buffer's position in layout coordinates. The function is called
+ - from root to leaves (in rendering order).
+ -}
+foreign import capi "wlr/types/wlr_scene.h wlr_scene_output_for_each_buffer"
+    wlr_scene_output_for_each_buffer :: Ptr WLR_scene_output -> FunPtr WLR_scene_buffer_iterator_func -> Ptr () -> IO ()
+
+{-
+ - Get a scene-graph output from a struct wlr_output.
+ -
+ - If the output hasn't been added to the scene-graph, returns NULL.
+ -}
+foreign import capi "wlr/types/wlr_scene.h wlr_scene_get_scene_output"
+    wlr_scene_get_scene_output :: Ptr WLR_scene -> Ptr WLR_output -> IO (Ptr WLR_scene_output)
+
+{-
+ - Attach an output layout to a scene.
+ -
+ - The resulting scene output layout allows to synchronize the positions of scene
+ - outputs with the positions of corresponding layout outputs.
+ -
+ - It is automatically destroyed when the scene or the output layout is destroyed.
+ -}
+foreign import capi "wlr/types/wlr_scene.h wlr_scene_attach_output_layout"
+    wlr_scene_attach_output_layout :: Ptr WLR_scene -> Ptr WLR_output_layout -> IO (Ptr WLR_scene_output_layout)
+
+{-
+ - Add an output to the scene output layout.
+ -
+ - When the layout output is repositioned, the scene output will be repositioned
+ - accordingly.
+ -}
+foreign import capi "wlr/types/wlr_scene.h wlr_scene_output_layout_add_output"
+    wlr_scene_output_layout_add_output :: Ptr WLR_scene_output_layout -> Ptr WLR_scene_output_layout_output -> Ptr WLR_scene_output -> IO ()
