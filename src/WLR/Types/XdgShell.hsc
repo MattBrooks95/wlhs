@@ -134,6 +134,10 @@ import WLR.Util.Box (WLR_box)
     offset y, Int32
 }}
 
+-- TODO this is a dummy export until I can figure out how to declare
+-- the xdg_surface's C union type field
+data WLR_xdg_surface
+
 {{ struct wlr/types/wlr_xdg_shell.h,
     wlr_xdg_popup_configure,
     fields, Word32,
@@ -152,6 +156,7 @@ import WLR.Util.Box (WLR_box)
  - immediately or at some time in the future; not doing so
  - is a protocol violation.
  -}
+{- commented out until I figure out xdg_surface C union type
 {{ struct wlr/types/wlr_xdg_shell.h,
     wlr_xdg_toplevel,
 	resource, Ptr WL_resource,
@@ -181,7 +186,9 @@ import WLR.Util.Box (WLR_box)
     events set_title, WL_signal,
     events set_app_id, WL_signal
 }}
+-}
 
+{- commented out until I figure out xdg_surface C union type
 {{ struct wlr/types/wlr_xdg_shell.h,
     wlr_xdg_popup,
     base, Ptr WLR_xdg_surface,
@@ -196,6 +203,7 @@ import WLR.Util.Box (WLR_box)
     events reposition, WL_signal,
     grab_link, WL_list
 }}
+-}
 
 {-
  - An xdg-surface is a user interface element requiring management by the
