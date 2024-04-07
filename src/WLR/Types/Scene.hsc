@@ -543,3 +543,60 @@ foreign import capi "wlr/types/wlr_scene.h wlr_scene_attach_output_layout"
  -}
 foreign import capi "wlr/types/wlr_scene.h wlr_scene_output_layout_add_output"
     wlr_scene_output_layout_add_output :: Ptr WLR_scene_output_layout -> Ptr WLR_scene_output_layout_output -> Ptr WLR_scene_output -> IO ()
+
+{-
+ - Add a node displaying a surface and all of its sub-surfaces to the
+ - scene-graph.
+ -}
+foreign import capi "wlr/types/wlr_scene.h wlr_scene_subsurface_tree_create"
+    wlr_scene_subsurface_tree_create :: Ptr WLR_scene_tree -> Ptr WLR_surface -> IO (Ptr WLR_scene_tree)
+
+{-
+ - Sets a cropping region for any subsurface trees that are children of this
+ - scene node. The clip coordinate space will be that of the root surface of
+ - the subsurface tree.
+ -
+ - A NULL or empty clip will disable clipping
+ -}
+foreign import capi "wlr/types/wlr_scene.h wlr_scene_subsurface_tree_set_clip"
+    wlr_scene_subsurface_tree_set_clip :: Ptr WLR_scene_node -> Ptr WLR_box -> IO ()
+
+{-
+ - Add a node displaying an xdg_surface and all of its sub-surfaces to the
+ - scene-graph.
+ -
+ - The origin of the returned scene-graph node will match the top-left corner
+ - of the xdg_surface window geometry.
+ -}
+foreign import capi "wlr/types/wlr_scene.h wlr_scene_xdg_surface_create"
+    wlr_scene_xdg_surface_create :: Ptr WLR_scene_tree -> Ptr WLR_xdg_surface -> IO (Ptr WLR_scene_tree)
+
+{-
+ - Add a node displaying a layer_surface_v1 and all of its sub-surfaces to the
+ - scene-graph.
+ -
+ - The origin of the returned scene-graph node will match the top-left corner
+ - of the layer surface.
+ -}
+foreign import capi "wlr/types/wlr_scene.h wlr_scene_layer_surface_v1_create"
+    wlr_scene_layer_surface_v1_create :: Ptr WLR_scene_tree -> Ptr WLR_layer_surface_v1 -> IO (Ptr WLR_scene_layer_surface_v1)
+
+{-
+ - Configure a layer_surface_v1, position its scene node in accordance to its
+ - current state, and update the remaining usable area.
+ -
+ - full_area represents the entire area that may be used by the layer surface
+ - if its exclusive_zone is -1, and is usually the output dimensions.
+ - usable_area represents what remains of full_area that can be used if
+ - exclusive_zone is >= 0. usable_area is updated if the surface has a positive
+ - exclusive_zone, so that it can be used for the next layer surface.
+ -}
+foreign import capi "wlr/types/wlr_scene.h wlr_scene_layer_surface_v1_configure"
+    wlr_scene_layer_surface_v1_configure :: Ptr WLR_scene_layer_surface_v1 -> Ptr WLR_box -> Ptr WLR_box -> IO ()
+
+{-
+ - Add a node displaying a drag icon and all its sub-surfaces to the
+ - scene-graph.
+ -}
+foreign import capi "wlr/types/wlr_scene.h wlr_scene_drag_icon_create"
+    wlr_scene_drag_icon_create :: Ptr WLR_scene_tree -> Ptr WLR_drag_icon -> IO (Ptr WLR_scene_tree)
