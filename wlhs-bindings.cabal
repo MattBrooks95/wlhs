@@ -54,6 +54,7 @@ library
         WLR.Types.Pointer
         WLR.Types.Scene
         WLR.Types.Seat
+        WLR.Types.XdgShell
         WLR.Util.Addon
         WLR.Util.Box
         WLR.Util.Edges
