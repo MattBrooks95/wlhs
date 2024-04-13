@@ -1,6 +1,9 @@
 {-# LANGUAGE PatternSynonyms #-}
 module WLR.Types.LayerShellV1 where
 
+-- commenting this out because it breaks the repl
+-- I need to figure out how to tell Cabal about the local C header files
+
 #define WLR_USE_UNSTABLE
 #include <wlr/types/wlr_layer_shell_v1.h>
 #include "wlr-layer-shell-unstable-v1-protocol.h"
