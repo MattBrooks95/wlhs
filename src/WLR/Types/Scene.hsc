@@ -24,7 +24,7 @@ import WLR.Types.Buffer (WLR_buffer)
 import WLR.Types.DamageRing (WLR_damage_ring)
 import WLR.Types.Output (WLR_output, WLR_output_state)
 import WLR.Types.OutputLayout (WLR_output_layout)
-import WLR.Types.LayerShellV1 (WLR_layer_surface_v1)
+-- import WLR.Types.LayerShellV1 (WLR_layer_surface_v1)
 import WLR.Types.XdgShell (WLR_xdg_surface)
 import WLR.Util.Box (WLR_box, WLR_fbox)
 import WLR.Util.Addon (WLR_addon)
@@ -38,6 +38,11 @@ import Time.Time (TIMESPEC)
 -- exist as forward struct definitions in the original wlr_scene.h file
 data WLR_scene_output_layout
 data WLR_scene_output_layout_output
+
+-- including WLR.Types.LayerShellV1 causes the build to fail because it can't find
+-- "No such file or directory #include "wlr-layer-shell-unstable-v1-protocol.h"
+-- wlr_scene.h uses a forward struct definition, so maybe I should too?
+data WLR_layer_surface_v1
 
 {{ enum WLR_scene_node_type,
     WLR_SCENE_NODE_TREE,
