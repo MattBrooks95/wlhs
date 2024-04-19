@@ -6,7 +6,6 @@ module WLR.Types.LayerShellV1 where
 
 #define WLR_USE_UNSTABLE
 #include <wlr/types/wlr_layer_shell_v1.h>
-#include "wlr-layer-shell-unstable-v1-protocol.h"
 
 import Foreign (Word32, Int32)
 import Foreign.Storable (Storable(..))
