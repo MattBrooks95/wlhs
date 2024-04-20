@@ -21,6 +21,16 @@ For [direnv][ghub:direnv] users, an `.envrc` file is also provided.
 
 `wlhs-bindings` contains a custom `Setup.hs`,
   which extends [hsc2hs](https://github.com/haskell/hsc2hs) files with some custom syntax.
+*note* be careful about trailing commas in templated sections
+```
+{{ enum WLR_some_enum,
+    ENUM_VAL_1,
+    ENUM_VAL_2,
+    ENUM_VAL_3,
+}}
+```
+may make the build fail because of the trailing comma after `ENUM_VAL_3`
+
 This is probably best illustrated by example:
 
 <table>
