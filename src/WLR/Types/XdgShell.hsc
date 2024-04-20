@@ -11,9 +11,10 @@ import Foreign.C.Types (CBool, CInt)
 import Foreign.C.String (CString)
 import Foreign (Word32, Int32)
 
-import WL.ServerCore (WL_signal, WL_listener)
+import WL.ServerCore (WL_signal, WL_listener, WL_event_source, WL_global)
 import WL.Utils (WL_list)
 import WL.ServerCore (WL_resource, WL_signal, WL_listener)
+import WL.Client (WL_client)
 
 import WLR.Types.Seat (WLR_seat)
 import WLR.Types.Compositor (WLR_surface)
@@ -210,6 +211,12 @@ import WLR.Util.Box (WLR_box)
 }}
 
 {{ struct wlr/types/wlr_xdg_shell.h,
+    wlr_xdg_surface_state,
+    configure_serial, Word32,
+    geometry, WLR_box
+}}
+
+{{ struct wlr/types/wlr_xdg_shell.h,
     wlr_xdg_client,
     shell, Ptr WLR_xdg_shell,
     resource, Ptr WL_resource,
@@ -218,6 +225,52 @@ import WLR.Util.Box (WLR_box)
     link, WL_list,
     ping_serial, Word32,
     ping_timer, Ptr WL_event_source
+}}
+
+{{ struct wlr/types/wlr_xdg_shell.h,
+    wlr_xdg_shell,
+    global, Ptr WL_global,
+    version, Word32,
+    clients, WL_list,
+    popup_grabs, WL_list,
+    ping_timeout, Word32,
+    display_destroy, WL_listener,
+    events new_surface, WL_signal,
+    events destroy, WL_signal,
+    data, Ptr ()
+}}
+
+{-
+// Note: as per xdg-shell protocol, the compositor has to
+// handle state requests by sending a configure event,
+// even if it didn't actually change the state. Therefore,
+// every compositor implementing xdg-shell support *must*
+// listen to these signals and schedule a configure event
+// immediately or at some time in the future; not doing so
+// is a protocol violation.
+-}
+{{ struct wlr/types/wlr_xdg_shell.h,
+    wlr_xdg_toplevel,
+    resource, Ptr WL_resource,
+    base, Ptr WLR_xdg_surface,
+    parent, Ptr WLR_xdg_toplevel,
+    parent_unmap, WL_listener,
+    current, WLR_xdg_toplevel_state,
+    pending, WLR_xdg_toplevel_state,
+    scheduled, WLR_xdg_toplevel_configure,
+    requested, WLR_xdg_toplevel_requested,
+    title, CString,
+    app_id, CString,
+
+    events request_maximize, WL_signal,
+    events request_fullscreen, WL_signal,
+    events request_minimize, WL_signal,
+    events request_move, WL_signal,
+    events request_resize, WL_signal,
+    events request_show_window_menu, WL_signal,
+    events set_parent, WL_signal,
+    events set_title, WL_signal,
+    events set_app_id, WL_signal,
 }}
 
 {-
@@ -268,5 +321,5 @@ import WLR.Util.Box (WLR_box)
     events configure, WL_signal,
     events ack_configure, WL_signal,
     data, Ptr (),
-    role_resource_destroy, WL_Listener
+    role_resource_destroy, WL_listener
 }}
