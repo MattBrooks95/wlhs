@@ -108,13 +108,13 @@ import WLR.Util.Box (WLR_box)
  - Flip, 2) Slide, 3) Resize.
  -}
 {{ enum XDG_positioner_constraint_adjustment,
-	XDG_POSITIONER_CONSTRAINT_ADJUSTMENT_NONE,
-	XDG_POSITIONER_CONSTRAINT_ADJUSTMENT_SLIDE_X,
-	XDG_POSITIONER_CONSTRAINT_ADJUSTMENT_SLIDE_Y,
-	XDG_POSITIONER_CONSTRAINT_ADJUSTMENT_FLIP_X,
-	XDG_POSITIONER_CONSTRAINT_ADJUSTMENT_FLIP_Y,
-	XDG_POSITIONER_CONSTRAINT_ADJUSTMENT_RESIZE_X,
-	XDG_POSITIONER_CONSTRAINT_ADJUSTMENT_RESIZE_Y
+    XDG_POSITIONER_CONSTRAINT_ADJUSTMENT_NONE,
+    XDG_POSITIONER_CONSTRAINT_ADJUSTMENT_SLIDE_X,
+    XDG_POSITIONER_CONSTRAINT_ADJUSTMENT_SLIDE_Y,
+    XDG_POSITIONER_CONSTRAINT_ADJUSTMENT_FLIP_X,
+    XDG_POSITIONER_CONSTRAINT_ADJUSTMENT_FLIP_Y,
+    XDG_POSITIONER_CONSTRAINT_ADJUSTMENT_RESIZE_X,
+    XDG_POSITIONER_CONSTRAINT_ADJUSTMENT_RESIZE_Y
 }}
 
 {{ struct wlr/types/wlr_xdg_shell.h,
@@ -133,10 +133,6 @@ import WLR.Util.Box (WLR_box)
     offset x, Int32,
     offset y, Int32
 }}
-
--- TODO this is a dummy export until I can figure out how to declare
--- the xdg_surface's C union type field
-data WLR_xdg_surface
 
 {{ struct wlr/types/wlr_xdg_shell.h,
     wlr_xdg_popup_configure,
@@ -205,6 +201,25 @@ data WLR_xdg_surface
 }}
 -}
 
+{-| this enum tells you which element of wlr_xdg_surfaces union type exists
+-}
+{{ enum WLR_xdg_surface_role,
+    WLR_XDG_SURFACE_ROLE_NONE,
+    WLR_XDG_SURFACE_ROLE_TOPLEVEL,
+    WLR_XDG_SURFACE_ROLE_POPUP
+}}
+
+{{ struct wlr/types/wlr_xdg_shell.h,
+    wlr_xdg_client,
+    shell, Ptr WLR_xdg_shell,
+    resource, Ptr WL_resource,
+    client, Ptr WL_client,
+    surfaces, WL_list,
+    link, WL_list,
+    ping_serial, Word32,
+    ping_timer, Ptr WL_event_source
+}}
+
 {-
  - An xdg-surface is a user interface element requiring management by the
  - compositor. An xdg-surface alone isn't useful, a role should be assigned to
@@ -218,9 +233,16 @@ data WLR_xdg_surface
  - The role object representing the role. NULL if the object was destroyed.
  -
  - NOTE hsroots used empty data declarations for the C union types xdg_toplevel
- - xdg_popup. Our templating solution doesn't seem to mention unions TODO how to do this
+ - xdg_popup. Our templating solution doesn't seem to mention unions, hsc2hs doesn't support unions either
+ - 
+ - therefore the 'toplevel' field of this data declaration is cursed
+ - in this case, both values of the union are pointers, so users of this data type will
+ - need to use unsafeCastPtr (or something BurningWitness suggested) based on the value of the role field
+    union {
+        struct wlr_xdg_toplevel *toplevel;
+        struct wlr_xdg_popup *popup;
+    };
  -}
-{-
 {{ struct wlr/types/wlr_xdg_shell.h,
     wlr_xdg_surface,
     client, Ptr WLR_xdg_client,
@@ -229,42 +251,22 @@ data WLR_xdg_surface
     link, WL_list,
     role, WLR_xdg_surface_role,
     role_resource, Ptr WL_resource,
-
-
-    // NULL if the role resource is inert
-    union {
-        struct wlr_xdg_toplevel *toplevel;
-        struct wlr_xdg_popup *popup;
-    };
-
-    struct wl_list popups; // wlr_xdg_popup.link
-
-    bool added, configured;
-    struct wl_event_source *configure_idle;
-    uint32_t scheduled_serial;
-    struct wl_list configure_list;
-
-    struct wlr_xdg_surface_state current, pending;
-
-    // Whether the surface is ready to receive configure events
-    bool initialized;
-    // Whether the latest commit is an initial commit
-    bool initial_commit;
-
-    struct {
-        struct wl_signal destroy;
-        struct wl_signal ping_timeout;
-        struct wl_signal new_popup;
-
-        // for protocol extensions
-        struct wl_signal configure; // struct wlr_xdg_surface_configure
-        struct wl_signal ack_configure; // struct wlr_xdg_surface_configure
-    } events;
-
-    void *data;
-
-    // private state
-
-    struct wl_listener role_resource_destroy;
+    toplevel, Ptr WLR_xdg_toplevel,
+    popups, WL_list,
+    added, CBool,
+    configured, CBool,
+    configure_idle, Ptr WL_event_source,
+    scheduled_serial, Word32,
+    configure_list, WL_list,
+    current, WLR_xdg_surface_state,
+    pending, WLR_xdg_surface_state,
+    initialized, CBool,
+    initial_commit, CBool,
+    events destroy, WL_signal,
+    events ping_timeout, WL_signal,
+    events new_popup, WL_signal,
+    events configure, WL_signal,
+    events ack_configure, WL_signal,
+    data, Ptr (),
+    role_resource_destroy, WL_Listener
 }}
--}
