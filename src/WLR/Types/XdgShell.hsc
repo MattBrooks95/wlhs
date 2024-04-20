@@ -185,23 +185,6 @@ import WLR.Util.Box (WLR_box)
 }}
 -}
 
-{- commented out until I figure out xdg_surface C union type
-{{ struct wlr/types/wlr_xdg_shell.h,
-    wlr_xdg_popup,
-    base, Ptr WLR_xdg_surface,
-    link, WL_list,
-    resource, Ptr WL_resource,
-    sent_initial_configure, CBool,
-    parent, Ptr WLR_surface,
-    seat, Ptr WLR_seat,
-    scheduled, WLR_xdg_popup_configure,
-    current, WLR_xdg_popup_state,
-    pending, WLR_xdg_popup_state,
-    events reposition, WL_signal,
-    grab_link, WL_list
-}}
--}
-
 {-| this enum tells you which element of wlr_xdg_surfaces union type exists
 -}
 {{ enum WLR_xdg_surface_role,
@@ -271,6 +254,21 @@ import WLR.Util.Box (WLR_box)
     events set_parent, WL_signal,
     events set_title, WL_signal,
     events set_app_id, WL_signal,
+}}
+
+{{ struct wlr/types/wlr_xdg_shell.h,
+    wlr_xdg_popup,
+    base, Ptr WLR_xdg_surface,
+    link, WL_list,
+    resource, Ptr WL_resource,
+    sent_initial_configure, CBool,
+    parent, Ptr WLR_surface,
+    seat, Ptr WLR_seat,
+    scheduled, WLR_xdg_popup_configure,
+    current, WLR_xdg_popup_state,
+    pending, WLR_xdg_popup_state,
+    events reposition, WL_signal,
+    grab_link, WL_list
 }}
 
 {-
