@@ -7,7 +7,7 @@ module WLR.Types.XdgShell where
 
 import Foreign.Storable (Storable(..))
 import Foreign.Ptr (Ptr)
-import Foreign.C.Types (CBool, CInt)
+import Foreign.C.Types (CBool(..), CInt(..))
 import Foreign.C.String (CString)
 import Foreign (Word32, Int32)
 
@@ -32,27 +32,6 @@ import WLR.Util.Box (WLR_box)
     XDG_POSITIONER_GRAVITY_BOTTOM_LEFT,
     XDG_POSITIONER_GRAVITY_TOP_RIGHT,
     XDG_POSITIONER_GRAVITY_BOTTOM_RIGHT
-}}
-
-{{ struct wlr/types/wlr_xdg_shell.h,
-    wlr_xdg_positioner_rules,
-    anchor_rect, WLR_box,
-    anchor, WLR_xdg_positioner_anchor,
-    gravity, WLR_xdg_positioner_gravity,
-    constraint_adjustment, WLR_xdg_positioner_constraint_adjustment,
-
-    bool reactive;
-
-    bool has_parent_configure_serial;
-    uint32_t parent_configure_serial;
-
-	struct {
-		int32_t width, height;
-	} size, parent_size;
-
-	struct {
-		int32_t x, y;
-	} offset;
 }}
 
 {{ struct wlr/types/wlr_xdg_shell.h,
