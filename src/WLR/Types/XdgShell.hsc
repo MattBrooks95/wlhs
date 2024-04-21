@@ -11,12 +11,13 @@ import Foreign.C.Types (CBool, CInt)
 import Foreign.C.String (CString)
 import Foreign (Word32, Int32)
 
+import WL.ServerProtocol (WL_display)
 import WL.ServerCore (WL_signal, WL_listener, WL_event_source, WL_global)
 import WL.Utils (WL_list)
 import WL.ServerCore (WL_resource, WL_signal, WL_listener)
 import WL.Client (WL_client)
 
-import WLR.Types.Seat (WLR_seat)
+import WLR.Types.Seat (WLR_seat, WLR_seat_client)
 import WLR.Types.Compositor (WLR_surface)
 import WLR.Types.Output (WLR_output)
 import WLR.Util.Box (WLR_box)
@@ -31,6 +32,33 @@ import WLR.Util.Box (WLR_box)
     XDG_POSITIONER_GRAVITY_BOTTOM_LEFT,
     XDG_POSITIONER_GRAVITY_TOP_RIGHT,
     XDG_POSITIONER_GRAVITY_BOTTOM_RIGHT
+}}
+
+{{ struct wlr/types/wlr_xdg_shell.h,
+    wlr_xdg_positioner_rules,
+    anchor_rect, WLR_box,
+    anchor, WLR_xdg_positioner_anchor,
+    gravity, WLR_xdg_positioner_gravity,
+    constraint_adjustment, WLR_xdg_positioner_constraint_adjustment,
+
+    bool reactive;
+
+    bool has_parent_configure_serial;
+    uint32_t parent_configure_serial;
+
+	struct {
+		int32_t width, height;
+	} size, parent_size;
+
+	struct {
+		int32_t x, y;
+	} offset;
+}}
+
+{{ struct wlr/types/wlr_xdg_shell.h,
+    wlr_xdg_positioner,
+    resource, Ptr WL_resource,
+    rules, Ptr WLR_xdg_positioner_rules,
 }}
 
 {{ struct wlr/types/wlr_xdg_shell,
@@ -321,3 +349,115 @@ import WLR.Util.Box (WLR_box)
     data, Ptr (),
     role_resource_destroy, WL_listener
 }}
+
+{{ struct wlr/types/wlr_xdg_shell.h,
+    wlr_xdg_toplevel_move_event,
+    toplevel, Ptr WLR_xdg_toplevel,
+    seat, Ptr WLR_seat,
+    serial, Word32
+}}
+
+{{ struct wlr/types/wlr_xdg_shell.h,
+    wlr_xdg_toplevel_resize_event,
+    toplevel, Ptr WLR_xdg_toplevel,
+    seat, Ptr WLR_seat_client,
+    serial, Word32,
+    edges, Word32
+}}
+
+{{ struct wlr/types/wlr_xdg_shell.h,
+    wlr_xdg_toplevel_show_window_menu_event,
+    toplevel, Ptr WLR_xdg_toplevel,
+    seat, Ptr WLR_seat_client,
+    serial, Word32,
+    x, Int32,
+    y, Int32
+}}
+
+{-|
+ - Create the xdg_wm_base global with the specified version.
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_shell_create"
+    wlr_xdg_shell_create :: Ptr WL_display -> Word32 -> IO (Ptr WLR_xdg_shell)
+
+{-| Get the corresponding struct wlr_xdg_surface from a resource.
+ -
+ - Aborts if the resource doesn't have the correct type. Returns NULL if the
+ - resource is inert.
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_surface_from_resource"
+    wlr_xdg_surface_from_resource :: Ptr WL_resource -> IO (Ptr WLR_xdg_surface)
+
+{-| Get the corresponding struct wlr_xdg_popup from a resource.
+ -
+ - Aborts if the resource doesn't have the correct type. Returns NULL if the
+ - resource is inert.
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_popup_from_resource"
+    wlr_xdg_popup_from_resource :: Ptr WL_resource -> IO (Ptr WLR_xdg_popup)
+
+{- Get the corresponding struct wlr_xdg_toplevel from a resource.
+ -
+ - Aborts if the resource doesn't have the correct type. Returns NULL if the
+ - resource is inert.
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_toplevel_from_resource"
+    wlr_xdg_toplevel_from_resource :: Ptr WL_resource -> IO (Ptr WLR_xdg_toplevel)
+
+{-| Get the corresponding struct wlr_xdg_positioner from a resource.
+ -
+ - Aborts if the resource doesn't have the correct type.
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_positioner_from_resource"
+    wlr_xdg_positioner_from_resource :: Ptr WL_resource -> IO (Ptr WLR_xdg_positioner)
+
+{-|
+ - Send a ping to the surface. If the surface does not respond in a reasonable
+ - amount of time, the ping_timeout event will be emitted.
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_surface_ping"
+    wlr_xdg_surface_ping :: Ptr WLR_xdg_surface -> IO ()
+
+{-|
+ - Request that this toplevel surface be the given size. Returns the associated
+ - configure serial.
+ - toplevel -> width -> height ->
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_toplevel_set_size"
+    wlr_xdg_toplevel_set_size :: Ptr WLR_xdg_toplevel -> Int32 -> Int32 -> IO Word32
+
+{-|
+ - Request that this toplevel show itself in an activated or deactivated
+ - state. Returns the associated configure serial.
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_toplevel_set_activated"
+    wlr_xdg_toplevel_set_activated :: Ptr WLR_xdg_toplevel -> CBool -> IO Word32
+
+{-|
+ - Request that this toplevel consider itself maximized or not
+ - maximized. Returns the associated configure serial.
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_toplevel_set_maximized"
+    wlr_xdg_toplevel_set_maximized :: Ptr WLR_xdg_toplevel -> CBool -> IO Word32
+
+{-|
+ - Request that this toplevel consider itself fullscreen or not
+ - fullscreen. Returns the associated configure serial.
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_toplevel_set_fullscreen"
+    wlr_xdg_toplevel_set_fullscreen :: Ptr WLR_xdg_toplevel -> CBool -> IO Word32
+
+{-|
+ - Request that this toplevel consider itself to be resizing or not
+ - resizing. Returns the associated configure serial.
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_toplevel_set_resizing"
+    wlr_xdg_toplevel_set_resizing :: Ptr WLR_xdg_toplevel -> CBool -> IO Word32
+
+{-|
+ - Request that this toplevel consider itself in a tiled layout and some
+ - edges are adjacent to another part of the tiling grid. `tiled_edges` is a
+ - bitfield of enum wlr_edges. Returns the associated configure serial.
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_toplevel_set_tiled"
+    wlr_xdg_toplevel_set_tiled :: Ptr WLR_xdg_toplevel -> Word32 -> IO Word32
