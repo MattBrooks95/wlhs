@@ -7,7 +7,7 @@ module WLR.Types.XdgShell where
 
 import Foreign.Storable (Storable(..))
 import Foreign.Ptr (Ptr)
-import Foreign.C.Types (CBool(..), CInt(..))
+import Foreign.C.Types (CBool(..), CInt(..), CDouble(..))
 import Foreign.C.String (CString)
 import Foreign (Word32, Int32)
 
@@ -18,7 +18,7 @@ import WL.ServerCore (WL_resource, WL_signal, WL_listener)
 import WL.Client (WL_client)
 
 import WLR.Types.Seat (WLR_seat, WLR_seat_client)
-import WLR.Types.Compositor (WLR_surface)
+import WLR.Types.Compositor (WLR_surface, WLR_surface_iterator_func_t)
 import WLR.Types.Output (WLR_output)
 import WLR.Util.Box (WLR_box)
 
@@ -440,3 +440,166 @@ foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_toplevel_set_resizing"
  -}
 foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_toplevel_set_tiled"
     wlr_xdg_toplevel_set_tiled :: Ptr WLR_xdg_toplevel -> Word32 -> IO Word32
+
+{-|
+ -  Configure the recommended bounds for the client's window geometry size.
+ -  Returns the associated configure serial.
+ -  toplevel -> width -> height ->
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_toplevel_set_bounds"
+    wlr_xdg_toplevel_set_bounds :: Ptr WLR_xdg_toplevel -> Int32 -> Int32 -> IO Word32
+
+{-|
+ -  Configure the window manager capabilities for this toplevel. `caps` is a
+ -  bitfield of `enum wlr_xdg_toplevel_wm_capabilities`. Returns the associated
+ -  configure serial.
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_toplevel_set_wm_capabilities"
+    wlr_xdg_toplevel_set_wm_capabilities :: Ptr WLR_xdg_toplevel -> Word32 -> IO Word32
+
+{-|
+ -  Request that this toplevel consider itself suspended or not
+ -  suspended. Returns the associated configure serial.
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_toplevel_set_suspended"
+    wlr_xdg_toplevel_set_suspended :: Ptr WLR_xdg_toplevel -> CBool -> IO Word32
+
+{-|
+ -  Request that this toplevel closes.
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_toplevel_send_close"
+    wlr_xdg_toplevel_send_close :: Ptr WLR_xdg_toplevel -> IO ()
+
+{-|
+ -  Sets the parent of this toplevel. Parent can be NULL.
+ - 
+ -  Returns true on success, false if setting the parent would create a loop.
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_toplevel_set_parent"
+    wlr_xdg_toplevel_set_parent :: Ptr WLR_xdg_toplevel -> Ptr WLR_xdg_toplevel -> IO CBool
+
+{-|
+ -  Notify the client that the popup has been dismissed and destroy the
+ -  struct wlr_xdg_popup, rendering the resource inert.
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_popup_destroy"
+    wlr_xdg_popup_destroy :: Ptr WLR_xdg_popup -> IO ()
+
+{-|
+ -  Get the position for this popup in the surface parent's coordinate system.
+ -  popup -> sx -> sy ->
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_popup_get_position"
+    wlr_xdg_popup_get_position :: Ptr WLR_xdg_popup -> Ptr CDouble -> Ptr CDouble -> IO ()
+
+{-|
+ -  Get the geometry based on positioner rules.
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_positioner_rules_get_geometry"
+    wlr_xdg_positioner_rules_get_geometry :: Ptr WLR_xdg_positioner_rules -> Ptr WLR_box -> IO ()
+
+{-|
+ -  Unconstrain the box from the constraint area according to positioner rules.
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_positioner_rules_unconstrain_box"
+    wlr_xdg_positioner_rules_unconstrain_box :: Ptr WLR_xdg_positioner_rules -> Ptr WLR_box -> Ptr WLR_box -> IO ()
+
+{-|
+ -  Convert the given coordinates in the popup coordinate system to the toplevel
+ -  surface coordinate system.
+ -  popup -> popup sx -> popup sy -> toplevel sx -> toplevel sy ->
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_popup_get_toplevel_coords"
+    wlr_xdg_popup_get_toplevel_coords :: Ptr WLR_xdg_popup -> CInt -> CInt -> Ptr CInt -> Ptr CInt -> IO ()
+
+{-|
+ -  Set the geometry of this popup to unconstrain it according to its
+ -  xdg-positioner rules. The box should be in the popup's root toplevel parent
+ -  surface coordinate system.
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_popup_unconstrain_from_box"
+    wlr_xdg_popup_unconstrain_from_box :: Ptr WLR_xdg_popup -> Ptr WLR_box -> IO ()
+
+{-|
+ -  Find a surface within this xdg-surface tree at the given surface-local
+ -  coordinates. Returns the surface and coordinates in the leaf surface
+ -  coordinate system or NULL if no surface is found at that location.
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_surface_surface_at"
+    wlr_xdg_surface_surface_at :: Ptr WLR_xdg_surface -> CDouble -> CDouble -> Ptr CDouble -> Ptr CDouble -> IO (Ptr WLR_surface)
+
+{-|
+ -  Find a surface within this xdg-surface's popup tree at the given
+ -  surface-local coordinates. Returns the surface and coordinates in the leaf
+ -  surface coordinate system or NULL if no surface is found at that location.
+ -  x -> y -> x -> y
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_surface_popup_surface_at"
+    wlr_xdg_surface_popup_surface_at :: Ptr WLR_xdg_surface -> CDouble -> CDouble -> Ptr CDouble -> Ptr CDouble -> IO (Ptr WLR_surface)
+
+{-|
+ -  Get a struct wlr_xdg_surface from a struct wlr_surface.
+ - 
+ -  Returns NULL if the surface doesn't have the xdg_surface role or
+ -  if the xdg_surface has been destroyed.
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_surface_try_from_wlr_surface"
+    wlr_xdg_surface_try_from_wlr_surface :: Ptr WLR_surface -> IO (Ptr WLR_xdg_surface)
+
+{-|
+ -  Get a struct wlr_xdg_toplevel from a struct wlr_surface.
+ - 
+ -  Returns NULL if the surface doesn't have the xdg_surface role, the
+ -  xdg_surface is not a toplevel, or the xdg_surface/xdg_toplevel objects have
+ -  been destroyed.
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_toplevel_try_from_wlr_surface"
+    wlr_xdg_toplevel_try_from_wlr_surface :: Ptr WLR_surface -> IO (Ptr WLR_xdg_toplevel)
+
+{-|
+ -  Get a struct wlr_xdg_popup from a struct wlr_surface.
+ - 
+ -  Returns NULL if the surface doesn't have the xdg_surface role, the
+ -  xdg_surface is not a popup, or the xdg_surface/xdg_popup objects have
+ -  been destroyed.
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_popup_try_from_wlr_surface"
+    wlr_xdg_popup_try_from_wlr_surface :: Ptr WLR_surface -> IO (Ptr WLR_xdg_popup)
+
+{-|
+ -  Get the surface geometry.
+ - 
+ -  This is either the geometry as set by the client, or defaulted to the bounds
+ -  of the surface + the subsurfaces (as specified by the protocol).
+ - 
+ -  The x and y value can be < 0.
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_surface_get_geometry"
+    wlr_xdg_surface_get_geometry :: Ptr WLR_xdg_surface -> Ptr WLR_box -> IO ()
+
+{-|
+ -  Call `iterator` on each mapped surface and popup in the xdg-surface tree
+ -  (whether or not this xdg-surface is mapped), with the surface's position
+ -  relative to the root xdg-surface. The function is called from root to leaves
+ -  (in rendering order).
+ -  `Ptr ()` is user_data
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_surface_for_each_surface"
+    wlr_xdg_surface_for_each_surface :: Ptr WLR_xdg_surface -> WLR_surface_iterator_func_t -> Ptr () -> IO ()
+
+{-|
+ -  Call `iterator` on each mapped popup's surface and popup's subsurface in the
+ -  xdg-surface tree (whether or not this xdg-surface is mapped), with the
+ -  surfaces's position relative to the root xdg-surface. The function is called
+ -  from root to leaves (in rendering order).
+ -  `Ptr ()` is user_data
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_surface_for_each_popup_surface"
+    wlr_xdg_surface_for_each_popup_surface :: Ptr WLR_xdg_surface -> WLR_surface_iterator_func_t -> Ptr () -> IO ()
+
+{-|
+ -  Schedule a surface configuration. This should only be called by protocols
+ -  extending the shell.
+ -}
+foreign import capi "wlr/types/wlr_xdg_shell.h wlr_xdg_surface_schedule_configure"
+    wlr_xdg_surface_schedule_configure :: Ptr WLR_xdg_surface -> IO Word32

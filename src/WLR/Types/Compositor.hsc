@@ -21,8 +21,10 @@ import PIXMAN.Pixman (PIXMAN_region32)
 #define WLR_USE_UNSTABLE
 #include <wlr/types/wlr_compositor.h>
 
--- not exactly sure what int32_t should map to, but I think it's just CInt
--- some of the fields in wlr_surface had this `int32_t` type
+{-| iterator function
+ - surface -> coordinate x -> coordinate y -> user data -> void
+ -}
+type WLR_surface_iterator_func_t = FunPtr (Ptr WLR_surface -> CInt -> CInt -> Ptr () -> IO ())
 
 --WLR_surface
 -- the 'resource' field had a source comment, "//may be NULL"
