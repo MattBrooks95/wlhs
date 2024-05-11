@@ -3,7 +3,6 @@ module WLR.Types.XdgShell where
 
 #define WLR_USE_UNSTABLE
 #include<wlr/types/wlr_xdg_shell.h>
-#include "xdg-shell-protocol.h"
 
 import Foreign.Storable (Storable(..))
 import Foreign.Ptr (Ptr)
