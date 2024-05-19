@@ -129,3 +129,12 @@ pattern WLR_ENUM_VALUE_2 = #const WLR_ENUM_VALUE_2
 </td>
 </tr>
 </table>
+
+## Gotchas
+- be careful about the generated Data declaration's field type names
+    - for example, the struct `wlr_surface` has a field `has_buffer`, so the template will generate a field name `wlr_surface_has_buffer`, which conflicts with the name of an actual function in the Wlroots C code
+    - I suppose we can fix this just by adding some suffix to the end of the Haskell function name, like '_func', to distinguish it from the record field constructor
+    ```haskell
+    foreign import capi "wlr/types/wlr_compositor.h wlr_surface_has_buffer"
+        wlr_surface_has_buffer_func :: Ptr WLR_surface -> IO (CBool)
+    ```

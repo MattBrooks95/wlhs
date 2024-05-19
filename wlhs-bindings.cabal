@@ -39,6 +39,7 @@ library
         WLR.Render.Swapchain
         WLR.Render.Texture
         WLR.Types.Compositor
+        WLR.Types.Subcompositor
         WLR.Types.DamageRing
         WLR.Types.Buffer
         WLR.Types.InputDevice
