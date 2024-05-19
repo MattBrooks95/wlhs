@@ -10,8 +10,9 @@ import Foreign.Ptr (Ptr)
 import Foreign.C.Types (CUInt, CBool, CInt)
 import Foreign.Storable (Storable(..))
 
-import WL.Utils (WL_array)
-import WL.ServerProtocol (WL_data_device_manager_dnd_action)
+import WL.Global (WL_global)
+import WL.Utils (WL_array, WL_list)
+import WL.ServerProtocol (WL_data_device_manager_dnd_action, WL_display)
 import WL.ServerCore (WL_signal, WL_listener)
 
 import WLR.Types.Compositor (WLR_surface)
@@ -82,3 +83,22 @@ import WLR.Types.Seat (
     icon_destroy, WL_listener,
     data, Ptr ()
 }}
+
+{{ struct
+    wlr/types/wlr_data_device.h,
+    wlr_data_device_manager,
+    global, Ptr WL_global,
+    data_sources, WL_list,
+
+    display_destroy, WL_listener,
+
+    events destroy, WL_signal,
+
+    data, Ptr ()
+}}
+
+{-
+ - Create a wl_data_device_manager global for this display.
+ -}
+foreign import capi "wlr/types/wlr_compositor.h wlr_data_device_manager_create"
+    wlr_data_device_manager_create :: Ptr WL_display -> IO (Ptr WLR_data_device_manager)

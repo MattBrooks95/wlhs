@@ -63,3 +63,9 @@ foreign import capi "wayland-server-core.h wl_display_destroy_clients"
 
 type WL_resource_destroy_func_t = FunPtr (Ptr WL_resource -> IO ())
 --typedef void (*wl_resource_destroy_func_t)(struct wl_resource *resource);
+
+{- TODO doing an empty data decl until I can find the actual definition -}
+data WL_event_loop
+
+foreign import capi "wayland-server-core.h wl_display_get_event_loop"
+    wl_display_get_event_loop :: Ptr WL_display -> IO (Ptr WL_event_loop)
