@@ -28,7 +28,9 @@ testCompositor = do
     wlDisplay <- wl_display_create
     print $ "wlDisplay:" <> show wlDisplay
     backend <- wlr_backend_autocreate wlDisplay nullPtr 
+    print $ "backend:" <> show backend
     renderer <- wlr_renderer_autocreate backend
+    print $ "renderer" <> show renderer
     initSucc <- wlr_renderer_init_wl_display renderer wlDisplay
     print $ "render init wl display success?:" <> show initSucc
     allocator <- wlr_allocator_autocreate backend renderer
