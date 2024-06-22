@@ -26,3 +26,6 @@ import WL.ServerCore (WL_signal)
 
     data, Ptr ()
 }}
+
+foreign import capi "wlr/backend.h wlr_output_layout_create"
+    wlr_output_layout_create :: IO (Ptr WLR_output_layout)

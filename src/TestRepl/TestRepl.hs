@@ -4,7 +4,7 @@ module TestRepl.TestRepl (
     ) where
 
 import WLR.Types.Scene
-import WL.ServerCore (wl_display_create, wl_display_get_event_loop)
+import WL.ServerCore (wl_display_create)
 import Foreign (Word32, nullPtr)
 import WLR.Types.XdgShell (wlr_xdg_shell_create)
 import WLR.Types.Subcompositor (wlr_subcompositor_create)
@@ -13,6 +13,7 @@ import WLR.Render.Renderer (wlr_renderer_autocreate, wlr_renderer_init_wl_displa
 import WLR.Render.Allocator (wlr_allocator_autocreate)
 import WLR.Types.Compositor (wlr_compositor_create)
 import WLR.Types.DataDevice (wlr_data_device_manager_create)
+import WLR.Types.OutputLayout (wlr_output_layout_create)
 
 testScene :: IO ()
 testScene = do
@@ -23,6 +24,7 @@ testScene = do
     wlrXdgShell <- wlr_xdg_shell_create wlDisplay (1 :: Word32)
     print wlrXdgShell
 
+-- Following along the steps in wlroots v0.17's tinywl example's main function
 testCompositor :: IO ()
 testCompositor = do
     wlDisplay <- wl_display_create
@@ -46,3 +48,5 @@ testCompositor = do
     print $ "subcompositor:" <> show subCompositor
     dataDeviceManager <- wlr_data_device_manager_create wlDisplay
     print $ "data device manager:" <> show dataDeviceManager
+    outputLayout <- wlr_output_layout_create
+    print $ "output layout" <> outputLayout
