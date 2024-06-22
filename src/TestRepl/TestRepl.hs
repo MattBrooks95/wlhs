@@ -4,7 +4,7 @@ module TestRepl.TestRepl (
     ) where
 
 import WLR.Types.Scene
-import WL.ServerCore (wl_display_create)
+import WL.ServerCore (wl_display_create, wl_display_get_event_loop)
 import Foreign (Word32, nullPtr)
 import WLR.Types.XdgShell (wlr_xdg_shell_create)
 import WLR.Types.Subcompositor (wlr_subcompositor_create)
@@ -27,7 +27,12 @@ testCompositor :: IO ()
 testCompositor = do
     wlDisplay <- wl_display_create
     print $ "wlDisplay:" <> show wlDisplay
-    backend <- wlr_backend_autocreate wlDisplay nullPtr 
+    -- TODO the wlr_backend_autocreate function has already changed upstream
+    -- it takes an event loop now
+    -- backend <- flip wlr_backend_autocreate nullPtr =<< wl_display_get_event_loop wlDisplay
+    -- TODO this is failing on my Nvidia PC, yay nvidia
+    -- https://forums.developer.nvidia.com/t/dri3open-missing-in-the-x11-driver-for-wlroots-compositors/214164/2
+    backend <- wlr_backend_autocreate wlDisplay nullPtr
     print $ "backend:" <> show backend
     renderer <- wlr_renderer_autocreate backend
     print $ "renderer" <> show renderer
