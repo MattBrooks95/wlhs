@@ -11,6 +11,7 @@ import WLR.Render.Renderer (wlr_renderer_autocreate, wlr_renderer_init_wl_displa
 import WLR.Render.Allocator (wlr_allocator_autocreate)
 import WLR.Types.Compositor (wlr_compositor_create)
 
+-- following along in the steps of tinywl.c's main function
 main :: IO ()
 main = do
     wlr_log_init WLR_DEBUG nullFunPtr
