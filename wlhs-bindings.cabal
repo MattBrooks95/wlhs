@@ -61,7 +61,9 @@ library
         WLR.Util.Edges
         WLR.Util.Log
         WLR.Version
+        WLR.Backend.Session
         TestRepl.TestRepl
+        Tiny
 
     pkgconfig-depends:  wlroots ==0.17.1, wayland-server, pixman-1
     include-dirs: protocol-headers

@@ -10,8 +10,8 @@ import Foreign.C.Types
 
 import WL.ServerCore
 import WL.ServerProtocol
+import WLR.Backend.Session
 
-{{ struct wlr/backend.h, wlr_session }}
 {{ struct wlr/backend.h, wlr_backend_impl }}
 
 {{ struct
