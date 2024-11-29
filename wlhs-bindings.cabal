@@ -56,11 +56,13 @@ library
         WLR.Types.Scene
         WLR.Types.Seat
         WLR.Types.XdgShell
+        WLR.Types.XCursorManager
         WLR.Util.Addon
         WLR.Util.Box
         WLR.Util.Edges
         WLR.Util.Log
         WLR.Version
+        WLR.XCursor
         TestRepl.TestRepl
 
     pkgconfig-depends:  wlroots ==0.17.1, wayland-server, pixman-1
