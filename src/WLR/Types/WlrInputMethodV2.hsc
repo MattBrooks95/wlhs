@@ -1,5 +1,4 @@
-module WLR.Types.WlrInputMethodV2 (
-    ) where
+module WLR.Types.WlrInputMethodV2 where
 
 import Foreign.C.String (CString)
 import Foreign.C.Types (CInt, CBool)
@@ -8,9 +7,10 @@ import Foreign.Ptr (Ptr)
 import WL.ServerProtocol (WL_display)
 import WL.ServerCore (WL_resource, WL_signal, WL_listener, WL_global)
 import WL.Utils (WL_list)
-import WLR.Types.Keyboard (WLR_keyboard)
+import WLR.Types.Keyboard (WLR_keyboard, WLR_keyboard_modifiers)
 import WLR.Types.Seat (WLR_seat, WLR_seat_client)
 import WLR.Types.Compositor (WLR_surface)
+import WLR.Util.Box (WLR_box)
 
 #define WLR_USE_UNSTABLE
 #include <wlr/types/wlr_input_method_v2.h>
@@ -120,3 +120,76 @@ foreign import capi "wlr/types/wlr_input_method_v2.h wlr_input_method_manager_v2
     wlr_input_method_manager_v2_create ::
         Ptr WL_display
         -> IO (Ptr WLR_input_method_manager_v2)
+
+foreign import capi "wlr/types/wlr_input_method_v2.h wlr_input_method_v2_send_activate"
+    wlr_input_method_v2_send_activate :: Ptr WLR_input_method_v2 -> IO ()
+
+foreign import capi "wlr/types/wlr_input_method_v2.h wlr_input_method_v2_send_deactivate"
+    wlr_input_method_v2_send_deactivate :: Ptr WLR_input_method_v2 -> IO ()
+
+foreign import capi "wlr/types/wlr_input_method_v2.h wlr_input_method_v2_send_surrounding_text"
+    wlr_input_method_v2_send_surrounding_text ::
+        Ptr WLR_input_method_v2
+        -> CString
+        -> Word32
+        -> Word32
+        -> IO ()
+
+foreign import capi "wlr/types/wlr_input_method_v2.h wlr_input_method_v2_send_content_type"
+    wlr_input_method_v2_send_content_type ::
+        Ptr WLR_input_method_v2
+        -> Word32
+        -> Word32
+        -> IO ()
+
+foreign import capi "wlr/types/wlr_input_method_v2.h wlr_input_method_v2_send_text_change_cause"
+    wlr_input_method_v2_send_text_change_cause ::
+        Ptr WLR_input_method_v2
+        -> Word32
+        -> IO ()
+
+foreign import capi "wlr/types/wlr_input_method_v2.h wlr_input_method_v2_send_done"
+    wlr_input_method_v2_send_done :: Ptr WLR_input_method_v2 -> IO ()
+
+foreign import capi "wlr/types/wlr_input_method_v2.h wlr_input_method_v2_send_unavailable"
+    wlr_input_method_v2_send_unavailable :: Ptr WLR_input_method_v2 -> IO ()
+
+{- |
+ - Get a struct wlr_input_popup_surface_v2 from a struct wlr_surface.
+ -
+ - Returns NULL if the surface has a different role or if the input popup
+ - surface has been destroyed.
+ -}
+foreign import capi "wlr/types/wlr_input_method_v2.h wlr_input_popup_surface_v2_try_from_wlr_surface"
+    wlr_input_popup_surface_v2_try_from_wlr_surface ::
+        Ptr WLR_surface
+        -> IO (Ptr WLR_input_popup_surface_v2)
+
+foreign import capi "wlr/types/wlr_input_method_v2.h wlr_input_popup_surface_v2_send_text_input_rectangle"
+    wlr_input_popup_surface_v2_send_text_input_rectangle ::
+        Ptr WLR_input_popup_surface_v2
+        -> Ptr WLR_box
+        -> IO ()
+
+-- | ... w32 time, w32 key, w32 state ...
+foreign import capi "wlr/types/wlr_input_method_v2.h wlr_input_method_keyboard_grab_v2_send_key"
+    wlr_input_method_keyboard_grab_v2_send_key ::
+        Ptr WLR_input_method_keyboard_grab_v2
+        -> Word32
+        -> Word32
+        -> Word32
+        -> IO ()
+foreign import capi "wlr/types/wlr_input_method_v2.h wlr_input_method_keyboard_grab_v2_send_modifiers"
+    wlr_input_method_keyboard_grab_v2_send_modifiers ::
+        Ptr WLR_input_method_keyboard_grab_v2
+        -> Ptr WLR_keyboard_modifiers
+        -> IO ()
+foreign import capi "wlr/types/wlr_input_method_v2.h wlr_input_method_keyboard_grab_v2_set_keyboard"
+    wlr_input_method_keyboard_grab_v2_set_keyboard ::
+        Ptr WLR_input_method_keyboard_grab_v2
+        -> Ptr WLR_keyboard
+        -> IO ()
+foreign import capi "wlr/types/wlr_input_method_v2.h wlr_input_method_keyboard_grab_v2_destroy"
+    wlr_input_method_keyboard_grab_v2_destroy ::
+        Ptr WLR_input_method_keyboard_grab_v2
+        -> IO ()
