@@ -57,6 +57,7 @@ library
         WLR.Types.Seat
         WLR.Types.XdgShell
         WLR.Types.XCursorManager
+        WLR.Types.WlrInputMethodV2
         WLR.Util.Addon
         WLR.Util.Box
         WLR.Util.Edges
